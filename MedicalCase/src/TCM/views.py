@@ -1,12 +1,30 @@
 # Create your views here.
 #encoding=utf-8
 from django.shortcuts import render_to_response
+from django.db.models import Q
 from TCM.models import Doctor
+from TCM.models import Medicalcase
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
+from django.template import RequestContext 
 import datetime
 import MySQLdb
 
 def name(request):
-   names = Doctor.objects.all()
-   print names
-   return render_to_response('test.html', {'names': names})
+    doctorname = request.REQUEST.get('doctorname',None)
+    other = request.REQUEST.get('other',None)
+   
+    if doctorname is not None:
+        doctorsList=Doctor.objects.all()
+        for doctors in doctorsList:
+            if doctors.drname == doctorname:
+                return render_to_response('test.html', {'doctorname': doctors})
+   
+    if other is not None:
+        others = Medicalcase.objects.filter(Q(casename__icontains=other)|Q(diagnosis__icontains=other)|Q(therapy__icontains=other)|Q(discrimination__icontains=other))
+        return render_to_response('test.html', {'other': others})
+            
+    return render_to_response('test.html')
+    #info= Doctor.objects.get(drname=doctorname)
+    #print doctorname
+    #return render_to_response('test.html', {'doctorname': info})

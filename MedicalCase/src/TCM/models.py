@@ -18,7 +18,7 @@ class Doctor(models.Model):
     class Meta:
         db_table = 'doctor'
     def __unicode__(self):
-        return u'%s' % (self.drname)
+        return u'%s %s' % (self.drname,self.drintroduction)
 
 class Intrgratedmedicalcase(models.Model):
     caseid = models.BigIntegerField(primary_key=True, db_column='caseID') # Field name made lowercase.
@@ -37,3 +37,5 @@ class Medicalcase(models.Model):
     discrimination = models.TextField(blank=True)
     class Meta:
         db_table = 'medicalcase'
+    def __unicode__(self):
+        return u'%s %s %s %s' % (self.casename,self.diagnosis,self.therapy,self.discrimination)    

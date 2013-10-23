@@ -1,8 +1,21 @@
 <html>
-<head>
-<title>一个例子</title>
+<title>炫酷的查询</title>
 <body>
-	<div>{{names}}</div>
+
+	<form method="GET" action="/name/">
+    <br>
+         医生信息查询<input type="text" name="doctorname">
+        <input type="submit" value="查询">
+	<br/>
+	<br>
+        其他信息查询<input type="text" name="other">
+        <input type="submit" value="查询">
+    <br/>
+	<br>	
+
+        {{doctorname}}
+        {{other}}
+    <br/>
+
 </body>
-</head>
 </html>
