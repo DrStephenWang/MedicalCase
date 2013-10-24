@@ -24,7 +24,7 @@ def name(request):
         others = Medicalcase.objects.filter(Q(casename__icontains=other)|Q(diagnosis__icontains=other)|Q(therapy__icontains=other)|Q(discrimination__icontains=other))
         return render_to_response('test.html', {'other': others})
             
-    return render_to_response('test.html')
+    return render_to_response('test4.html')
     #info= Doctor.objects.get(drname=doctorname)
     #print doctorname
     #return render_to_response('test.html', {'doctorname': info})
