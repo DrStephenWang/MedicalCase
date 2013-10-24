@@ -17,6 +17,7 @@ $(function() {
 	$("#front_btn").live(
 			'click',
 			function() {
+				alert("hello");
 				$("#search_info").submit();
 			}
 			)

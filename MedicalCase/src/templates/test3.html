@@ -85,37 +85,29 @@
 		</div>
 
 		<div class="floatTOP">
-			<div class="UnderSearchBarTabs1">
-				<a id="href_A" href="front"></a> <a id="href_B" href="classifybrowse"></a>
-				<a id="href_C" href="senior"></a>
-			</div>
+			
 			<div class="logoSearch_L2">
 
 
 				<div class="clearfix"></div>
 
+				
 				<div id="search_cf" class="search cf" id="home_type_nav">
-					<INPUT id="front_input" class=text maxLength=20 name=q> <A
-						class=button id="front_btn" href="#"></A> <br>
+					<form action="/name/" method="get" id="search_info">
+						<input id="front_input" class=text type="text" maxLength=20 name="keyword"> 
+						<A class=button id="front_btn" href="#"></A>      <br>
+					</form>
 					<br>
 					<br>
 					<br>
-					<div class="checkboxes2" id="option">
-						搜索选项：&nbsp; <input type="checkbox" name="option_all" id="cho_all">全选&nbsp;&nbsp;
-						<input type="checkbox" name="option" id="cho_med">单味药&nbsp;&nbsp;
-						<input type="checkbox" name="option" id="cho_src">药用动植物&nbsp;&nbsp;
-						<input type="checkbox" name="option" id="cho_chem">化合物&nbsp;&nbsp;
-						<input type="checkbox" name="option" id="cho_pre">方剂&nbsp;&nbsp;
-						<input type="checkbox" name="option" id="cho_syn">证候&nbsp;&nbsp;
-						<input type="checkbox" name="option" id="cho_dis">疾病&nbsp;&nbsp;
-					</div>
+					
 				</div>
 
 
 			</div>
 		</div>
 	</div>
-
+   {{q}}
 	<!-- footer -->
 	<div>
 		
