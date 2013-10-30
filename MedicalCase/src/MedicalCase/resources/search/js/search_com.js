@@ -6,8 +6,8 @@ var picUrl = "http://10.15.62.32:8888/tcmpro/pictures/search/";
 
 
 /*6大类映射*/
-var typeChMap = ["单味药","药用动植物","化合物","方剂","证候","疾病"];
-var typeEnMap = ["med","ori","chem","pre","syn","dis"];
+var typeChMap = ["医生姓名","其他信息"];
+var typeEnMap = ["doctor","other"];
 
 /*每页显示项*/
 var pageSize = 5;
@@ -79,9 +79,9 @@ function listToTable(data,type){
 		return "<tr><td></td><td class='null_info'>暂无信息</td><td></td></tr>";*/
 	
 	/*显示图片版本*/
-	var nodata = getRootPath() + "/resources/commonpages/images/no_data.png";
-	if(data.length == 0)
-		return "<tr><td></td><td class='null_info'><img src=" + nodata + " width=311px height=223px /></td><td></td></tr>";
+	//var nodata = getRootPath() + "/resources/commonpages/images/no_data.png";
+	//if(data.length == 0)
+		//return "<tr><td></td><td class='null_info'><img src=" + nodata + " width=311px height=223px /></td><td></td></tr>";
 	
 	var table = "";
 	
@@ -97,21 +97,21 @@ function listToTable(data,type){
         else field3 = transNullString(data[i].field3);*/
         
         /*显示图片版本*/
-       var nopic = getRootPath() + "/resources/home/Images/no_pic.png";
+       /*var nopic = getRootPath() + "/resources/home/Images/no_pic.png";
        if(isShowPic(type)){
         	field3 = "<img class='preview_pic' src=" + picUrl + type + "/" + transNullString(data[i].field4) + ".jpg onerror=$(this).attr('src','" + nopic + "').css('width','140px') onload='$(this).show()'/>";
        }
        else{
     	   field3 = transNullString(data[i].field3);
-       }
+       }*/
         
-        var prefix = "<tr><td class='list_field1'><a href='#' class='" + type +"_list_name'>";
-        var medInfo = prefix + field1 +"</a></td><td class='list_field2'>" + field2 + "</td><td class='list_field3'";
-        if(field3!='无' && (type == "pre" || type == "syn" || type == "dis")){
+        var prefix = "<tr><td class='list_field1'><a href='#' class='" + type+"_list_name'>";
+        var medInfo = prefix + field1 +"</a></td><td class='list_field2'>" + field2 + "</td>";
+        /*if(field3!='无' && (type == "pre" || type == "syn" || type == "dis")){
         	medInfo += "style='text-align:left;line-height:23px;padding-right:15px;'>" + field3 + "</td></tr>";
         }else{
         	medInfo += ">" + field3 + "</td></tr>";
-        }
+        }*/
         table += medInfo;
     }
 	
@@ -120,30 +120,23 @@ function listToTable(data,type){
 
 
 function getTableTitle(type){
-	var prefix = "<tr class='success'><th>中文名</th><th>";
+	var prefix = "<tr class='success'><th>";
 	var suffix = "</th></tr>";
-	if(type == "syn")
-		return prefix + "证候类型</th><th>常见病症" + suffix;
-	else if(type == "med")
-		return prefix + "功效</th><th>预览" + suffix;
-	else if(type == "ori")
-		return prefix + "科属</th><th>预览" + suffix;
-	else if(type == "chem")
-		return prefix + "CAS号</th><th>二维结构图" + suffix;
-	else if(type == "dis")
-		return prefix + "疾病种类</th><th>疾病描述" + suffix;
-	else if(type == "pre")
-		return prefix + "方剂出处</th><th>方剂组成" + suffix;
+	if(type == "doctor")
+		return prefix + "医生姓名</th><th>生平介绍" + suffix;
+	if(type == "other") 
+		return prefix + "医生姓名</th><th>病例名称" + suffix;
+	
 }
 
 /*对table中进行点击名字事件绑定*/
 $(function(){
 
-	$('.med_list_name').live('click', function () {
-		window.open("./med?medname=" + $(this).text());
+	$('.doctor_list_name').live('click', function () {
+		window.open("./doctor?drname=" + $(this).text()+"&pageno=1");
 	});
 	
-	$('.ori_list_name').live('click', function () {
+	$('.other_list_name').live('click', function () {
 		window.open("./ori?oriname=" + $(this).text());
 	});
 	

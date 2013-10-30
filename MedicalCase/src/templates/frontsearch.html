@@ -1,47 +1,35 @@
 
 
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
-
-<html dir="ltr" xml:lang="en-gb" xmlns="http://www.w3.org/1999/xhtml"
-	lang="en-gb">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>中草药基础知识搜索系统</title>
-<!-- js -->
-<script src="/common/jquery_1_8_3.js"></script>
-<script src="/common/ajax.js"></script>
-<script src="/search/js/search_com.js"></script>
-<script src="/search/js/csrf.js"></script>
-
-
-<script src="/search/js/home.js"></script>
-<!-- exlib -->
-<script src="/exlib/md5/md5.js"></script>
-<script
-	src="//search/js/bootstrap.min.js"></script>
-<script
-	src="/exlib/simple_pagination/jquery.simplePagination.js"></script>
-
-
-<!-- css -->
-<link rel=stylesheet type=text/css
-	href="/exlib/bootstrap/css/bootstrap.css">
-<link rel=stylesheet type=text/css
-	href="/exlib/bootstrap/css/bootstrap-responsive.css">
-<link rel=stylesheet type=text/css
-	href="/exlib/simple_pagination/simplePagination.css">
-<link rel=stylesheet type=text/css
-	href="/search/css/common.css">
-<link rel=stylesheet type=text/css
-	href="/search/css/index.css">
-<link rel=stylesheet type=text/css
-	href="/search/css/SubHeadAndFoot_index.css">
-	<link rel=stylesheet type=text/css
-	href="/search/css/jichushousuo.css">
-</HEAD>
-
-<BODY>
-	<div class=top>
+    
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>中草药基础知识搜索系统</title>
+		<!-- js -->
+		<script src="/common/jquery_1_8_3.js"></script>		
+		<script src="/common/ajax.js"></script>
+		<script src="/search/js/search_com.js"></script>
+		<script src="/search/js/csrf.js"></script>
+		<script src="/search/js/home.js"></script>
+	
+		<!-- exlib -->
+		<script src="/exlib/md5/md5.js"></script>
+		<script src="//search/js/bootstrap.min.js"></script>
+		<script src="/exlib/simple_pagination/jquery.simplePagination.js"></script>
+		
+		
+		<!-- css -->	
+		<link rel=stylesheet type=text/css href="/exlib/bootstrap/css/bootstrap.css">
+		<link rel=stylesheet type=text/css href="/exlib/bootstrap/css/bootstrap-responsive.css">
+		<link rel=stylesheet type=text/css href="/exlib/simple_pagination/simplePagination.css">
+		<LINK rel=stylesheet type=text/css href="/search/css/main.css">
+		<LINK rel=stylesheet type=text/css href="/search/css/common.css">
+		<LINK rel=stylesheet type=text/css href="/search/css/Peiwu_analyse.css">
+		<LINK rel=stylesheet type=text/css href="/search/css/extra.css">
+						
+	</head>
+	<body onload="initFront()">
 	     <div>
 	        
 
@@ -68,56 +56,62 @@
 	    </div>
 	</div>
 	     </div>
-		<div class=logoSearch>
-			<div class="logoSearch_L2">
-				<div class="logo"><A href="home" target=_blank><IMG src="/search/Images/logo.png"></A>
-	            </div>           
-				<div class="clearfix"></div>
-			</div>
+	
+		<div class=logo1>
+			<div class="logo1_L1">
+				<div class="logo">
+	    	    	<A href="home" target=_blank><IMG src="/search/Images/logo.png"></A>
+	    	    </div>
+		    </div>
+			<div class="logo1_L2">
+				<div class="logo">
+	    	    	<A href="../" target=_blank><IMG src="/search/Images/logo_huiju.png"></A>
+	    	    </div>
+		    </div>
 		</div>
-	</div>
-
-
-	<div class="bg_heise">
-		<div class="clearfix">
-			<div class="imgFrame2">
-				<img
-					src="/search/Images/2_08.png" />
-			</div>
+		
+		<div class="sub_nav_bg">
+			<div id="sub_nav">
+				<a href="front"><span id="nav_qwss" class="sub_nav_span"></span></a>
+				<a href="classifybrowse"><span id="nav_flll" class="sub_nav_span"></span></a>
+				<a href="senior"><span id="nav_zhcx" class="sub_nav_span"></span></a>
+		    </div>          
+	    </div>
+		
+		<div class="clearfix"></div>
+			
+		<div id="tab-title">	
+			<div id="front_menu">
+	    	</div>
 		</div>
-
-		<div class="floatTOP">
-			<div class="UnderSearchBarTabs1">
-				<a id="href_A" href="front"></a> <a id="href_B" href="classifybrowse"></a>
-				<a id="href_C" href="senior"></a>
-			</div>
-			<div class="logoSearch_L2">
-
-
-				<div class="clearfix"></div>
-
-				<div id="search_cf" class="search cf" id="home_type_nav">
-					<INPUT id="front_input" class=text maxLength=20 name=q> <A
-						class=button id="front_btn" href="#"></A> <br>
-					<br>
-					<br>
-					<br>
-					<div class="checkboxes2" id="option">
-						搜索选项：&nbsp; 
-						<input type="checkbox" name="option" id="doctor">医生姓名&nbsp;&nbsp;
-						<input type="checkbox" name="option" id="other">其他信息&nbsp;&nbsp;
-						
+		
+		<div class="clearfix"></div>
+		<div id="underline"></div>
+		<div class="clearfix"></div>
+		
+		<div class="container-fluid ">
+				<div class="row-fluid">
+					<div class="span12">
+						<div class="tabbable tabs-left">
+							<div class="tab-content span9">
+								<div class="tab-pane active" id="front_search_list">
+									<table class="table " id="front_search_table">
+										<thead id="front_search_list_title"></thead>
+										<tbody id="front_search_list_info"></tbody>
+									</table>
+								</div>
+	
+							</div>
+						</div>
+						<div id="front_search_pagincation" class="rs_pagincation"></div>
 					</div>
 				</div>
+		</div>		
+		{{retval}}
 
-
-			</div>
-		</div>
-	</div>
-
-	<!-- footer -->
-	<div>
-		
+<!-- footer -->
+     <div>
+          
     <!-- 统计信息 -->
     
     <!-- Piwik -->
@@ -208,6 +202,6 @@
                </div>
            </div>
        </div>
-	</div>
-</BODY>
-</HTML>
+     </div>
+
+</BODY></HTML>

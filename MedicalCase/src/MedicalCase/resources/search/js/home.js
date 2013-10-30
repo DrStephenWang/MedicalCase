@@ -1,51 +1,36 @@
+﻿
 $(function() {
 
 	var checkBox = document.getElementsByName("option");
 	for ( var k = 0; k < checkBox.length; k++)
 		checkBox[k].checked = false;
 
-	$('#cho_all').live('click', function() {
-		if (document.getElementById("cho_all").checked == true) {
-			for ( var k = 0; k < checkBox.length; k++)
-				checkBox[k].checked = true;
-		} else {
-			for ( var k = 0; k < checkBox.length; k++)
-				checkBox[k].checked = false;
-		}
-	});
+	
 
-	$("#front_btn").live(
+	$('#front_btn').live(
 			'click',
 			function() {
-				$("#search_info").submit();
-			}
-			)
-//	$('#front_btn').live(
-//			'click',
-//			function() {
-//				var keyword = $('#front_input').val();
-//				var range = "";
-//				var typeIndex = -1;
-//				for ( var k = 0; k < checkBox.length; k++) {
-//					if (checkBox[k].checked == true) {
-//						if (typeIndex == -1)
-//							typeIndex = k;
-//						range += "1";
-//					} else
-//						range += "0";
-//				}
-//				if (typeIndex == -1) {
-//					typeIndex = 0;
-//					range = "111111"
-//				}
-////			q = document.getElementsByname("q");
-////			window.location.href = "./name/?q=" + q;
-////				window.location.href = "./frontsearch?keyword=" + keyword
-////						+ "&range=" + range + "&pageno=1" + "&type="
-////						+ typeEnMap[typeIndex];
-////			});
-//
-//	window.location.hash = "#home_type_nav";
+				var keyword = $('#front_input').val();
+				var range = "";
+				var typeIndex = -1;
+				for ( var k = 0; k < checkBox.length; k++) {
+					if (checkBox[k].checked == true) {
+						if (typeIndex == -1)
+							typeIndex = k;
+						range += "1";
+					} else
+						range += "0";
+				}
+				if (typeIndex == -1) {
+					typeIndex = 0;
+					range = "10"
+				}
+				window.location.href = "./frontsearch?keyword=" + keyword
+						+ "&range=" + range + "&pageno=1" + "&type="
+						+ typeEnMap[typeIndex];
+			});
+
+	window.location.hash = "#home_type_nav";
 });
 
 function initFront() {
@@ -54,8 +39,9 @@ function initFront() {
 	var table = "";
 	var lastIndex = range.lastIndexOf("1");
 	window.location.hash = "#sub_nav";
-
-	for ( var i = 0; i < range.length; i++)
+	getFrontList();
+	
+	/*for ( var i = 0; i < range.length; i++)
 		if (range[i] == "1") {
 			if (type != typeEnMap[i])
 				table += "<span><a class='noselected front_tab' href='#' id='front_"
@@ -95,35 +81,49 @@ function initFront() {
 	});
 	$('#front_dis_tab').live('click', function() {
 		window.location.href = urlPrefix + "&type=dis";
-	});
+	});*/
 
 }
 
+
 function getFrontList() {
-	type = typeEnToCh(decodeURI(getUrlParam("type")));
+	
+	type = decodeURI(getUrlParam("type"));
 	var dataJson = {
 		"keyword" : decodeURI(getUrlParam("keyword")),
 		"type" : type,
 		"pageno" : parseInt(getUrlParam("pageno")),
 		"pagesize" : pageSize
 	};
-	var data = JSON.stringify(dataJson);
+//	var data = JSON.stringify(dataJson);
 	var methodType = "POST";
-	var url = "./frontresultlist";
+	var url = "./frontresultlist/";
 	var contentType = "application/json;charset=utf-8";
-
-	ajaxFunc(methodType, url, data, contentType, getFrontListSuccessCB,
-			getFrontErrorCB);
+	//$.post(url, dataJson,success,contentType);
+//	ajaxFunc(methodType, url, dataJson, contentType, success,
+//			getFrontErrorCB);
+	$.ajax({
+		  type: 'POST',
+		  url: url,
+		  data: dataJson,
+		  success: getFrontListSuccessCB,
+		  error:getFrontErrorCB,
+		  dataType:'text'
+		});
 }
 
-function getFrontListSuccessCB(data, textStatus, jqXHR) {
 
+
+function getFrontListSuccessCB(data,textStatus,jqXHR) {
+    
+    alert("received");
+    data=eval('(' + data + ')');
 	var typeEn = typeChToEn(decodeURI(getUrlParam("type")));
 	var table = listToTable(data.list, typeEn);
-
+	
 	$("#front_search_list_title").html(getTableTitle(typeEn));
 	$("#front_search_list_info").html(table);
-
+	
 	if (parseInt(data.count) <= pageSize)
 		$("#front_search_pagincation").hide();
 
@@ -146,5 +146,7 @@ function getFrontListSuccessCB(data, textStatus, jqXHR) {
 					currentPage : getUrlParam("pageno")
 				});
 }
-function getFrontErrorCB() {
+
+function getFrontErrorCB(){
+	alert("Error");
 }

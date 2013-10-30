@@ -1,0 +1,28 @@
+<script src="/common/jquery_1_8_3.js"></script>
+<script src="/common/ajax.js"></script>
+<script src="/search/js/search_com.js"></script>
+<script src="/search/js/csrf.js"></script>
+
+
+<script>
+function test(){
+	$.post("../test_post_func/",{a:1,b:2},success);
+}
+
+function success(data, textStatus,jqHXR){
+	var x=data;
+	alert(x);
+}
+function reload(){
+	window.location.href="./reload/"
+}
+function retest(){
+	reload();
+	test();
+}
+</script>
+<html>
+<title></title>
+<body onload="test();">
+</body>
+</html>

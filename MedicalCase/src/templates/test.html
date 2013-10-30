@@ -1,18 +1,18 @@
 <html>
-<title>炫酷的查询</title>
+<title></title>
 <body>
 
-	<form method="GET">
+	<form method="GET" action="/name/">
     <br>
-         医生信息查询<input type="text" name="doctorname">
-        <input type="submit" value="查询">
+        <input type="text" name="doctorname">
+        <input type="submit" value="search">
 	<br/>
 	<br>
-        其他信息查询<input type="text" name="other">
+        <input type="text" name="keyword">
         <input type="submit" value="查询">
     <br/>
 	<br>	
-
+         {{retval}}
         {{doctorname}}
         {{other}}
     <br/>
