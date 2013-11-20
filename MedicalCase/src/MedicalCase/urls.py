@@ -16,13 +16,16 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
-    ('^name/$', 'TCM.views.name'),
-    ('^name/frontsearch$','TCM.views.frontsearch'),
-    ('^name/frontresultlist/$','TCM.views.frontresultlist'),
-    ('^name/doctor$', 'TCM.views.doctorpage'),
-    ('^name/doctorresultlist/$', 'TCM.views.doctorresultlist'),
-   
-
+    ('^front$', 'TCM.views.front'),
+    ('^frontsearch$','TCM.views.frontsearch'),
+    ('^frontresultlist$','TCM.views.frontresultlist'),
+    ('^doctor$', 'TCM.views.doctorpage'),
+    ('^doctorresultlist$', 'TCM.views.doctorresultlist'),
+    ('^classifybrowse$', 'TCM.views.classifybrows'),
+    ('^seniorsearch$', 'TCM.views.seniorsearch'),
+    ('^dislist$', 'TCM.views.dislist'),
+    ('^disclist$', 'TCM.views.disclist'),
+    
     (r'^(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_URL}) 
 
 

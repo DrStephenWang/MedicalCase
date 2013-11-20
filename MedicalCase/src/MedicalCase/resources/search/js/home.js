@@ -97,7 +97,7 @@ function getFrontList() {
 	};
 //	var data = JSON.stringify(dataJson);
 	var methodType = "POST";
-	var url = "./frontresultlist/";
+	var url = "./frontresultlist";
 	var contentType = "application/json;charset=utf-8";
 	//$.post(url, dataJson,success,contentType);
 //	ajaxFunc(methodType, url, dataJson, contentType, success,

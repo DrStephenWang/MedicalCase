@@ -10,75 +10,7 @@
 		<script src="/common/jquery_1_8_3.js"></script>		
 		<script src="/common/ajax.js"></script>
 		<script src="/search/js/search_com.js"></script>
-		
-		
-		<script type="text/javascript">
-		
-		function initFront() {
-			var drname = getUrlParam("drname");
-			window.location.hash = "#sub_nav";
-			getFrontList();
-		}
-		
-		function getFrontList() {
-			var drname = getUrlParam("drname");
-			var dataJson = {
-				"drname" : decodeURI(drname),
-				"pageno" : parseInt(getUrlParam("pageno")),
-				"pagesize" : pageSize
-				};
-			var methodType = "POST";
-			var url = "./doctorresultlist";
-			$.ajax({
-				type: 'POST',
-				url: url,
-				data: dataJson,
-				success: getFrontListSuccessCB,
-				error: getFrontErrorCB,
-				dataType:'text'
-			});
-		}
-		
-		function getFrontListSuccessCB(data,textStatus,jqXHR) {
-		    
-		    alert("received");
-		    data=eval('(' + data + ')');
-			//var typeEn = typeChToEn(decodeURI(getUrlParam("type")));
-			var table = listToTable(data.list, "doctor");
-			
-			//$("#front_search_list_title").html(getTableTitle(typeEn));
-			$("#front_search_list_info").html(table);
-			
-			if (parseInt(data.count) <= pageSize)
-				$("#front_search_pagincation").hide();
-
-			else
-				$("#front_search_pagincation").pagination(
-						{
-							items : parseInt(data.count),
-							itemsOnPage : pageSize,
-							cssStyle : 'light-theme',
-							hrefTextPrefix : '#',
-							onPageClick : function(pageNumber, event) {
-								window.location.href = "./doctor?drname="
-										+ decodeURI(getUrlParam("drname")) + "&pageno="
-										+ pageNumber;
-
-							},
-							prevText : "上一页",
-							nextText : "下一页",
-							currentPage : getUrlParam("pageno")
-						});
-		}
-		
-		function getFrontErrorCB(){
-			alert("Error");
-		}
-		
-		</script>
-		
-		
-		
+		<script src="/search/js/seniorsearch.js"></script>
 	
 		<!-- exlib -->
 		<script src="/exlib/md5/md5.js"></script>
@@ -93,13 +25,13 @@
 		<LINK rel=stylesheet type=text/css href="/search/css/main.css">
 		<LINK rel=stylesheet type=text/css href="/search/css/common.css">
 		<LINK rel=stylesheet type=text/css href="/search/css/Peiwu_analyse.css">
-		<LINK rel=stylesheet type=text/css href="/search/css/extra.css">
-						
+		<LINK rel=stylesheet type=text/css href="/search/css/extra.css">		
 	</head>
-	<body onload="initFront()">
-	     <div>
-	        
+	<body onload="initSeniorSearchResult()">
+        <div>
+               
 
+    
     <link rel="stylesheet" type="text/css" href="/commonpages/css/nav_header.css"></link>
     <link rel="stylesheet" type="text/css" href="/commonpages/dropdown/dropdown.css"></link>
     <script src="/commonpages/js/nav_header.js"></script>
@@ -122,7 +54,7 @@
 	        </ul>
 	    </div>
 	</div>
-	     </div>
+        </div>
 	
 		<div class=logo1>
 			<div class="logo1_L1">
@@ -148,56 +80,57 @@
 		<div class="clearfix"></div>
 			
 		<div id="tab-title">	
-			<div id="front_menu">
-	    	</div>
+            <span id="senior_search_type"></span>
 		</div>
 		
 		<div class="clearfix"></div>
 		<div id="underline"></div>
 		<div class="clearfix"></div>
 		
-		<div class="container-fluid ">
-				<div class="row-fluid">
-					<div class="span12">
-						<div class="tabbable tabs-left">
-							<div class="tab-content span9">
-								<div class="tab-pane active" id="front_search_list">
-									<table class="table " id="front_search_table">
-										<thead id="front_search_list_title"></thead>
-										<tbody id="front_search_list_info"></tbody>
-									</table>
-								</div>
-	
-							</div>
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span12">
+				<div class="tabbable tabs-left">
+					<div class="tab-content span9">
+						<div class="tab-pane active" id="senior_search_list">
+							<table class="table">
+								<thead id="senior_search_list_title"></thead>
+								<tbody id="senior_search_list_info"></tbody>
+							</table>
 						</div>
-						<div id="front_search_pagincation" class="rs_pagincation"></div>
 					</div>
 				</div>
-		</div>		
+				<div id="senior_search_pagincation" class="rs_pagincation"></div>
+			</div>
+		</div>
+	</div>		
 		
 
 <!-- footer -->
-     <div>
-          
+        <div>
+             
     <!-- 统计信息 -->
     
     <!-- Piwik -->
-	<script type="text/javascript"> 
-	  var _paq = _paq || [];
-	  _paq.push(['trackPageView']);
-	  _paq.push(['enableLinkTracking']);
-	  (function() {
-	    var u=(("https:" == document.location.protocol) ? "https" : "http") + "://10.15.62.209/piwik//";
-	    _paq.push(['setTrackerUrl', u+'piwik.php']);
-	    _paq.push(['setSiteId', 1]);
-	    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0]; g.type='text/javascript';
-	    g.defer=true; g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-	  })();
-	
-	</script>
-	<noscript><p><img src="http://10.15.62.209/piwik/piwik.php?idsite=1" style="border:0" alt="" /></p></noscript>
-	<!-- End Piwik Code -->
-	
+    <script type="text/javascript"> 
+      var _paq = _paq || [];
+      _paq.push(['trackPageView']);
+      _paq.push(['enableLinkTracking']);
+      (function() {
+        var u=(("https:" == document.location.protocol) ? "https" : "http") + "://10.15.62.29/piwik//";
+        _paq.push(['setTrackerUrl', u+'piwik.php']);
+        _paq.push(['setSiteId', 1]);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0]; g.type='text/javascript';
+        g.defer=true; g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+      })();
+    
+    </script>
+    <noscript><p><img src="http://10.15.62.29/piwik/piwik.php?idsite=1" style="border:0" alt="" /></p></noscript>
+    <!-- End Piwik Code -->
+
+    <noscript><p><img src="http://10.15.62.209/piwik/piwik.php?idsite=1" style="border:0" alt="" /></p></noscript>
+    <!-- End Piwik Code -->
+    
     <link rel="stylesheet" type="text/css" href="/commonpages/css/footer.css"></link>
     <div class="footer" style="margin-bottom:0px;">
            <div class=footer_L2>
@@ -269,6 +202,6 @@
                </div>
            </div>
        </div>
-     </div>
+        </div>
 
 </BODY></HTML>

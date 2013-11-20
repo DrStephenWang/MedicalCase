@@ -14,13 +14,102 @@ import string
 from django.core import serializers
 
  
-def name(request):
+def front(request):
             
-    return render_to_response('test5.html')
+    return render_to_response('front.html')
+
+def classifybrows(request):
+    
+    return render_to_response('classifybrows.html')
 
 def doctorpage(request):
-        
-        return render_to_response('doctorpage.html')
+    return render_to_response('doctorpage.html')
+    
+def seniorsearch(request):
+    return render_to_response('seniorsearch.html')
+
+def dislist(request):
+     response=HttpResponse()
+     disname=request.POST.get('disname',None)
+     pageNo=request.POST.get('pageno',None)
+     pageSize=request.POST.get('pagesize',None)
+     pageNo=string.atoi(pageNo)
+     pageSize=string.atoi(pageSize)
+     
+     result = Medicalcase.objects.filter(Q(casename__icontains=disname))
+     retval=serializers.serialize("json",result)
+     retval=json.loads(retval)
+     print(disname)
+     print(retval)
+     i=0
+     list=[]
+     data={}
+     for eachCase in retval:
+         i+=1
+     for j in range(pageSize):
+         if (pageNo-1)*pageSize+j>=i:
+             break
+         list.append({"field1":str(retval[(pageNo-1)*pageSize+j]["fields"]["drid"]),"field2":retval[(pageNo-1)*pageSize+j]["fields"]["casename"]})
+     data['count']=i
+     data['list']=list
+     data=json.dumps(data,ensure_ascii=False)
+     response.write(data)
+     return response
+ 
+def disclist(request):
+    response=HttpResponse()
+    discword=request.POST.get('discword',None)
+    pageNo=request.POST.get('pageno',None)
+    pageSize=request.POST.get('pagesize',None)
+    pageNo=string.atoi(pageNo)
+    pageSize=string.atoi(pageSize)
+     
+    result = Medicalcase.objects.filter(Q(discrimination__icontains=discword))
+    retval=serializers.serialize("json",result)
+    retval=json.loads(retval)
+    
+    i=0
+    list=[]
+    data={}
+    for eachCase in retval:
+        i+=1
+    for j in range(pageSize):
+        if (pageNo-1)*pageSize+j>=i:
+            break
+        list.append({"field1":str(retval[(pageNo-1)*pageSize+j]["fields"]["drid"]),"field2":retval[(pageNo-1)*pageSize+j]["fields"]["casename"]})
+    data['count']=i
+    data['list']=list
+    data=json.dumps(data,ensure_ascii=False)
+    response.write(data)
+    return response
+    
+def therlist(request):
+    response=HttpResponse()
+    ther=request.POST.get('ther',None)
+    pageNo=request.POST.get('pageno',None)
+    pageSize=request.POST.get('pagesize',None)
+    pageNo=string.atoi(pageNo)
+    pageSize=string.atoi(pageSize)
+     
+    result = Medicalcase.objects.filter(Q(therapy__icontains=ther))
+    retval=serializers.serialize("json",result)
+    retval=json.loads(retval)
+    
+    i=0
+    list=[]
+    data={}
+    for eachCase in retval:
+        i+=1
+    for j in range(pageSize):
+        if (pageNo-1)*pageSize+j>=i:
+            break
+        list.append({"field1":str(retval[(pageNo-1)*pageSize+j]["fields"]["drid"]),"field2":retval[(pageNo-1)*pageSize+j]["fields"]["casename"]})
+    data['count']=i
+    data['list']=list
+    data=json.dumps(data,ensure_ascii=False)
+    response.write(data)
+    return response
+    
     
 def doctorresultlist(request):
         response=HttpResponse()
@@ -62,14 +151,18 @@ def frontresultlist(request):
     pageSize=string.atoi(pageSize)
     
     if keyword and type=='doctor':
-        doctorList=Doctor.objects.all()
+        result=Doctor.objects.filter(Q(drname__icontains=keyword))
+        retval=serializers.serialize("json",result)
+        retval=json.loads(retval)
         i=0
         list=[]
         data={}
-        for eachDoctor in doctorList:
-            if eachDoctor.drname == keyword :
-               i+=1
-               list.append({"field1":eachDoctor.drname,"field2":eachDoctor.drintroduction})
+        for eachDoctor in retval:
+            i+=1
+        for j in range(pageSize):
+            if (pageNo-1)*pageSize+j>=i:
+                break
+            list.append({"field1":retval[(pageNo-1)*pageSize+j]["fields"]["drname"],"field2":retval[(pageNo-1)*pageSize+j]["fields"]["drintroduction"]})
         data['count']=i
         data['list']=list
         data=json.dumps(data,ensure_ascii=False)
@@ -89,6 +182,8 @@ def frontresultlist(request):
         for eachCase in retval:
            i+=1
         for j in range(pageSize):
+            if (pageNo-1)*pageSize+j>=i:
+                break
             list.append({"field1":str(retval[(pageNo-1)*pageSize+j]["fields"]["drid"]),"field2":retval[(pageNo-1)*pageSize+j]["fields"]["casename"]})   
         data['count']=i
         data['list']=list
