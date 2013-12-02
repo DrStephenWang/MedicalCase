@@ -17,7 +17,51 @@
 		function initFront() {
 			var drname = getUrlParam("drname");
 			window.location.hash = "#sub_nav";
+			getDoctorInfo();
 			getFrontList();
+		}
+		
+		function getDoctorInfo()
+		{
+				var dataJson = {
+					"keyword" : decodeURI(getUrlParam("drname")),
+					"type" : "doctor",
+					"pageno" : "1",
+					"pagesize" : "10"
+				};
+				var methodType = "POST";
+				var url = "./frontresultlist";
+				var contentType = "application/json;charset=utf-8";
+				$.ajax({
+					  type: 'POST',
+					  url: url,
+					  data: dataJson,
+					  success: getDoctorInfoSuccessCB,
+					  error:getDoctorInfoErrorCB,
+					  dataType:'text'
+					});
+		}
+		
+		function getDoctorInfoSuccessCB(data,textStatus,jqXHR)
+		{
+			
+		    data=eval('(' + data + ')');
+		    var field1 = transNullString(data.list[0].field1);
+		    var field2 = transNullString(data.list[0].field2);
+		    var field3 = transNullString(data.list[0].field3);
+		    
+		    var name = "<td class='list_field1'>" + field1 + "</td>";
+		    var ins = "<td class='list_field2'>" + field2 + "</td>";
+			var pic = "<td class='list_field3'><img src='" + field3 + "' width=140></td>";
+		    
+			var table = "<tr>"+pic+name+ins+"</tr>";
+			alert(table);
+			$("#doctor_info_list_info").html(table);
+		}
+		
+		function getDoctorInfoErrorCB()
+		{
+			alert("Error");
 		}
 		
 		function getFrontList() {
@@ -44,7 +88,7 @@
 		    alert("received");
 		    data=eval('(' + data + ')');
 			//var typeEn = typeChToEn(decodeURI(getUrlParam("type")));
-			var table = listToTable(data.list, "doctor");
+			var table = listToTable(data.list, "case");
 			
 			//$("#front_search_list_title").html(getTableTitle(typeEn));
 			$("#front_search_list_info").html(table);
@@ -141,7 +185,7 @@
 			<div id="sub_nav">
 				<a href="front"><span id="nav_qwss" class="sub_nav_span"></span></a>
 				<a href="classifybrowse"><span id="nav_flll" class="sub_nav_span"></span></a>
-				<a href="senior"><span id="nav_zhcx" class="sub_nav_span"></span></a>
+				<a href="graph"><span id="nav_zhcx" class="sub_nav_span"></span></a>
 		    </div>          
 	    </div>
 		
@@ -151,6 +195,23 @@
 			<div id="front_menu">
 	    	</div>
 		</div>
+		
+		<div class="container-fluid ">
+				<div class="row-fluid">
+					<div class="span12">
+						<div class="tabbable tabs-left">
+							<div class="tab-content span9">
+								<div class="tab-pane active" id="doctor_info_list">
+									<table class="table " id="doctor_info_table">
+										<thead id="doctor_info_list_title"></thead>
+										<tbody id="doctor_info_list_info"></tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+		</div>		
 		
 		<div class="clearfix"></div>
 		<div id="underline"></div>

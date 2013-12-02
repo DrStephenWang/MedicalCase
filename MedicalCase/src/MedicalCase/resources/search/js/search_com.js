@@ -106,7 +106,9 @@ function listToTable(data,type){
        }*/
         
         var prefix = "<tr><td class='list_field1'><a href='#' class='" + type+"_list_name'>";
-        var medInfo = prefix + field1 +"</a></td><td class='list_field2'>" + field2 + "</td>";
+        var medInfo = prefix + field1 +"</a></td><td class='list_field2'>" + field2 + "</td></tr>";
+        if(field1==null||field1=="")
+        	medInfo = "<tr><td></td><td class='list_field2'><a href='#' class='" + type+"_list_name'>"+field2+"</a></td></tr>";
         /*if(field3!='无' && (type == "pre" || type == "syn" || type == "dis")){
         	medInfo += "style='text-align:left;line-height:23px;padding-right:15px;'>" + field3 + "</td></tr>";
         }else{
@@ -134,6 +136,10 @@ $(function(){
 
 	$('.doctor_list_name').live('click', function () {
 		window.open("./doctor?drname=" + $(this).text()+"&pageno=1");
+	});
+	
+	$('.case_list_name').live('click', function () {
+		window.open("./casedetail?casename=" + $(this).text());
 	});
 	
 	$('.other_list_name').live('click', function () {

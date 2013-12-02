@@ -15,10 +15,50 @@ class Doctor(models.Model):
     drid = models.BigIntegerField(primary_key=True, db_column='drID') # Field name made lowercase.
     drname = models.CharField(max_length=50L, db_column='drName') # Field name made lowercase.
     drintroduction = models.CharField(max_length=5000L, db_column='drIntroduction', blank=True) # Field name made lowercase.
+    drimage = models.CharField(max_length=50L, db_column='drImage')
     class Meta:
         db_table = 'doctor'
     def __unicode__(self):
         return u'%s %s' % (self.drname,self.drintroduction)
+
+class ResultMedAndPre(models.Model):
+    id=models.IntegerField(primary_key=True,db_column='id')
+    text1=models.CharField(max_length=50L,db_column='Text1')
+    text2=models.CharField(max_length=30L,db_column='Text2')
+    num1=models.CharField(max_length=10L,db_column='num1')
+    num2=models.CharField(max_length=10L,db_column='num2')
+    num3=models.CharField(max_length=10L,db_column='num3')
+    num4=models.CharField(max_length=10L,db_column='num4')
+    class Meta:
+        db_table='resultmedandpre'
+    def __unicode__(self):
+        return u'%s %s' %(self.Pre,self.Med)
+
+class ResultSymptomAndDisease(models.Model):
+    id=models.IntegerField(primary_key=True,db_column='id')
+    text1=models.CharField(max_length=50L,db_column='Text1')
+    text2=models.CharField(max_length=30L,db_column='Text2')
+    num1=models.CharField(max_length=10L,db_column='num1')
+    num2=models.CharField(max_length=10L,db_column='num2')
+    num3=models.CharField(max_length=10L,db_column='num3')
+    num4=models.CharField(max_length=10L,db_column='num4')
+    class Meta:
+        db_table='resultsymptomanddisease'
+    def __unicode__(self):
+        return u'%s %s' %(self.Dis,self.Sym)
+
+class ResultWithoutMedicine(models.Model):
+    id=models.IntegerField(primary_key=True,db_column='id')
+    text1=models.CharField(max_length=50L,db_column='Text1')
+    text2=models.CharField(max_length=30L,db_column='Text2')
+    num1=models.CharField(max_length=10L,db_column='num1')
+    num2=models.CharField(max_length=10L,db_column='num2')
+    num3=models.CharField(max_length=10L,db_column='num3')
+    num4=models.CharField(max_length=10L,db_column='num4')
+    class Meta:
+        db_table='resultwithoutmedicine'
+    def __unicode__(self):
+        return u'%s %s' %(self.Text1,self.Text2)
 
 class Intrgratedmedicalcase(models.Model):
     caseid = models.BigIntegerField(primary_key=True, db_column='caseID') # Field name made lowercase.

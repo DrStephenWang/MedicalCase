@@ -4,6 +4,10 @@ from django.shortcuts import render_to_response
 from django.db.models import Q
 from TCM.models import Doctor
 from TCM.models import Medicalcase
+from TCM.models import Medicalcase
+from TCM.models import ResultMedAndPre
+from TCM.models import ResultWithoutMedicine
+from TCM.models import ResultSymptomAndDisease
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.template import RequestContext 
@@ -28,6 +32,9 @@ def doctorpage(request):
 def seniorsearch(request):
     return render_to_response('seniorsearch.html')
 
+def casedetail(request):
+    return render_to_response('casedetail.html')
+    
 def dislist(request):
      response=HttpResponse()
      disname=request.POST.get('disname',None)
@@ -120,20 +127,25 @@ def doctorresultlist(request):
         pageSize=string.atoi(pageSize)
         print(drname)
 
-        if drname :
-            caseList=Medicalcase.objects.all()
-            i=0
-            list=[]
-            data={}
-            for eachCase in caseList:
-                if eachCase.drid.drname==drname:
-                    i+=1
-                    list.append({"field2":eachCase.casename,"field1":""})  
-            data['count']=i
-            data['list']=list[(pageNo-1)*pageSize:(pageNo-1)*pageSize+pageSize]
-            data=json.dumps(data,ensure_ascii=False)
-            print(data)
-            response.write(data)
+        result=Doctor.objects.filter(drname__exact=drname)
+        drid=result[0].drid
+        result=Medicalcase.objects.filter(drid__exact=drid)
+        caseList=serializers.serialize("json",result)
+        caseList=json.loads(caseList)
+        i=0
+        list=[]
+        data={}
+        for eachCase in caseList:
+            i+=1
+        for j in range(pageSize):
+            if (pageNo-1)*pageSize+j>=i:
+                break
+            list.append({"field1":"","field2":caseList[(pageNo-1)*pageSize+j]["fields"]["casename"]})
+        data['count']=i
+        data['list']=list
+        data=json.dumps(data,ensure_ascii=False)
+        print(data)
+        response.write(data)
         return response
 
 def frontsearch(request):
@@ -162,7 +174,7 @@ def frontresultlist(request):
         for j in range(pageSize):
             if (pageNo-1)*pageSize+j>=i:
                 break
-            list.append({"field1":retval[(pageNo-1)*pageSize+j]["fields"]["drname"],"field2":retval[(pageNo-1)*pageSize+j]["fields"]["drintroduction"]})
+            list.append({"field1":retval[(pageNo-1)*pageSize+j]["fields"]["drname"],"field2":retval[(pageNo-1)*pageSize+j]["fields"]["drintroduction"],"field3":retval[(pageNo-1)*pageSize+j]["fields"]["drimage"]})
         data['count']=i
         data['list']=list
         data=json.dumps(data,ensure_ascii=False)
@@ -191,9 +203,78 @@ def frontresultlist(request):
         response.write(data)
         return response
     
-    
-    
-        
-    #info= Doctor.objects.get(drname=doctorname)
-    #print doctorname
-    #return render_to_response('test.html', {'doctorname': info})
+def casedetailinfo(request):
+    response=HttpResponse()
+    casename=request.POST.get('casename',None)
+    print(casename)
+    if casename :
+        result=Medicalcase.objects.filter(Q(casename__exact=casename))
+        caseList=serializers.serialize("json",result)
+        caseList=json.loads(caseList)
+        list={}
+        data={}
+        list['field1']=caseList[0]["fields"]["diagnosis"]
+        list['field2']=caseList[0]["fields"]["discrimination"]
+        list['field3']=caseList[0]["fields"]["therapy"]
+        data['list']=list
+        data=json.dumps(data,ensure_ascii=False)
+        print(data)
+        response.write(data)
+    return response
+
+def graphresultlist(request):
+     response=HttpResponse()
+     keyword = request.POST.get('keyword',None)
+     layer=2
+     data={'nodes':[],'links':[]}
+     data['nodes'].append({'name':keyword,'group':0})
+     for lay in range(layer):
+         for i in range(len(data['nodes'])):
+             if data['nodes'][i]['group']!=lay:
+                 continue
+             retval=graphSearchResult(data['nodes'][i]['name'])
+             for j in range(min(10,len(retval))):
+                 if retval[j]['fields']['text1'].find(data['nodes'][i]['name'])!=-1:
+                     text='text2'
+                 else:
+                     text='text1'
+                 node={}
+                 node['name']=retval[j]['fields'][text]
+                 node['group']=lay+1
+                 data['nodes'].append(node)
+                 link={}
+                 link['source']=i
+                 link['target']=len(data['nodes'])-1
+                 link['value']=1
+                 data['links'].append(link)
+                 
+     data=json.dumps(data,ensure_ascii=False)
+     f=open('D:/MedicalCase/MedicalCase/src/MedicalCase/resources/D3JS/data.json','w')
+     f.truncate()
+     f.write(data)
+     f.close()
+     return response
+
+def graphSearchResult(keyword):
+     
+     result1=ResultMedAndPre.objects.filter(Q(text1__icontains=keyword)|Q(text2__icontains=keyword))
+     result2=ResultSymptomAndDisease.objects.filter(Q(text1__icontains=keyword)|Q(text2__icontains=keyword))
+     result3=ResultWithoutMedicine.objects.filter(Q(text1__icontains=keyword)|Q(text2__icontains=keyword))
+     retval1=serializers.serialize("json",result1)
+     retval1=json.loads(retval1)
+     retval2=serializers.serialize("json",result2)
+     retval2=json.loads(retval2)
+     retval3=serializers.serialize("json",result3)
+     retval3=json.loads(retval3)
+     retval=retval1+retval2+retval3
+     
+     return retval
+ 
+def graph(request):
+    return render_to_response('graph.html')
+
+def graphsearch(request):
+    return render_to_response('graphsearch.html')    
+       
+def index(request):
+    return render_to_response('index.html')
