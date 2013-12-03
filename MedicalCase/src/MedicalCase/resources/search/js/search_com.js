@@ -1,11 +1,5 @@
-/*是否预览图片*/
-var listShowPicFlag = [true,true,true,false,false,false];
 
-/*图片地址前缀*/
-var picUrl = "http://10.15.62.32:8888/tcmpro/pictures/search/";
-
-
-/*6大类映射*/
+/*2大类映射*/
 var typeChMap = ["医生姓名","其他信息"];
 var typeEnMap = ["doctor","other"];
 
@@ -61,27 +55,10 @@ function typeEnToCh(type){
 	return type;
 }
 
-/*根据类型得到是否预览图片*/
-function isShowPic(type){
-	for(var i = 0 ; i < typeChMap.length ; i++)
-		if(typeChMap[i] == type)
-			return listShowPicFlag[i];
-	for(var i = 0 ; i < typeEnMap.length ; i++)
-		if(typeEnMap[i] == type)
-			return listShowPicFlag[i];
-}
 
 /*把返回信息列表组成table格式*/
 function listToTable(data,type){
 	
-	/*显示文字版版本*/
-	/*if(data.length == 0)
-		return "<tr><td></td><td class='null_info'>暂无信息</td><td></td></tr>";*/
-	
-	/*显示图片版本*/
-	//var nodata = getRootPath() + "/resources/commonpages/images/no_data.png";
-	//if(data.length == 0)
-		//return "<tr><td></td><td class='null_info'><img src=" + nodata + " width=311px height=223px /></td><td></td></tr>";
 	
 	var table = "";
 	
@@ -90,30 +67,18 @@ function listToTable(data,type){
         var field1 = transNullString(data[i].field1);
         var field2 = transNullString(data[i].field2);
         var field3 = "";
-        /*显示文字版本*/
-        /*判断是否预览图片*/
-        /*if(isShowPic(type))
-        	field3 = "<img class='preview_pic' src=" + picUrl + type + "/" + transNullString(data[i].field4) + ".jpg onerror='$(this).hide()' onload='$(this).show()'/>";
-        else field3 = transNullString(data[i].field3);*/
         
-        /*显示图片版本*/
-       /*var nopic = getRootPath() + "/resources/home/Images/no_pic.png";
-       if(isShowPic(type)){
-        	field3 = "<img class='preview_pic' src=" + picUrl + type + "/" + transNullString(data[i].field4) + ".jpg onerror=$(this).attr('src','" + nopic + "').css('width','140px') onload='$(this).show()'/>";
-       }
-       else{
-    	   field3 = transNullString(data[i].field3);
-       }*/
-        
-        var prefix = "<tr><td class='list_field1'><a href='#' class='" + type+"_list_name'>";
-        var medInfo = prefix + field1 +"</a></td><td class='list_field2'>" + field2 + "</td></tr>";
+        var listClass="";
+        if (type=='doctor'){
+        	var prefix = "<tr><td class='list_field1'><a href='#' class='doctor_list_name'>";
+        	var medInfo = prefix + field1 +"</a></td><td class='list_field2'>" + field2 + "</td></tr>";
+        }
+        else{
+        	var prefix = "<tr><td class='list_field1'><a href='#' class='doctor_list_name'>";
+        	var medInfo = prefix + field1 +"</a></td><td class='list_field2'><a href='#' class='case_list_name'>" + field2 + "</a></td></tr>";
+        }
         if(field1==null||field1=="")
         	medInfo = "<tr><td></td><td class='list_field2'><a href='#' class='" + type+"_list_name'>"+field2+"</a></td></tr>";
-        /*if(field3!='无' && (type == "pre" || type == "syn" || type == "dis")){
-        	medInfo += "style='text-align:left;line-height:23px;padding-right:15px;'>" + field3 + "</td></tr>";
-        }else{
-        	medInfo += ">" + field3 + "</td></tr>";
-        }*/
         table += medInfo;
     }
 	
@@ -142,28 +107,8 @@ $(function(){
 		window.open("./casedetail?casename=" + $(this).text());
 	});
 	
-	$('.other_list_name').live('click', function () {
-		window.open("./ori?oriname=" + $(this).text());
-	});
 	
-	$('.syn_list_name').live('click', function () {
-		window.open("./syn?synname=" + $(this).text());
-	});
 	
-	$('.dis_list_name').live('click', function () {
-		window.open("./dis?disname=" + $(this).text());
-	});
-	
-	$('.chem_list_name').live('click', function () {
-		window.open("./chem?chemname=" + $(this).text());
-	});
-	
-	$('.pre_list_name').live('click', function () {
-		var selectedRow = $('td',$(this).parent().parent());
-		var preName = $(selectedRow[0]).text();
-		var preBook = $(selectedRow[1]).text();
-		window.open("./pre?prename=" + preName + "&prebook=" + preBook);
-	});
 });
 
 function trim(str){ //删除左右两端的空格

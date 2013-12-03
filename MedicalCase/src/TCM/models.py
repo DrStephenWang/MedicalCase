@@ -75,7 +75,8 @@ class Medicalcase(models.Model):
     diagnosis = models.TextField(blank=True)
     therapy = models.TextField(blank=True)
     discrimination = models.TextField(blank=True)
+    drname= models.CharField(max_length=10L,db_column='drName')
     class Meta:
-        db_table = 'medicalcase'
+        db_table = 'medicalcase_copy_copy'
     def __unicode__(self):
-        return u'%s %s %s %s' % (self.casename,self.diagnosis,self.therapy,self.discrimination)    
+        return u'%s %s %s %s %s' % (self.casename,self.diagnosis,self.therapy,self.discrimination,self.drname)    

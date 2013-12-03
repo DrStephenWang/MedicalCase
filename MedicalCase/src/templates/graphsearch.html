@@ -27,6 +27,7 @@
 		}
 
 		</style>
+		
 	
 		<!-- exlib -->
 		<script src="/exlib/md5/md5.js"></script>
@@ -44,7 +45,7 @@
 		<LINK rel=stylesheet type=text/css href="/search/css/extra.css">
 						
 	</head>
-	<body onload="initFront()">
+	<body >
 	     <div>
 	        
 
@@ -105,45 +106,11 @@
 		<div class="clearfix"></div>
 		
 		<div class="container-fluid ">
-				<div class="row-fluid">
-					<div class="span12">
-						<div class="tabbable tabs-left">
-							<div class="tab-content span9">
-								<div class="tab-pane active" id="front_search_list">
-									<table class="table " id="front_search_table">
-										<thead id="front_search_list_title"></thead>
-										<tbody id="front_search_list_info"></tbody>
-									</table>
-								</div>
-	
-							</div>
-						</div>
-						<div id="front_search_pagincation" class="rs_pagincation"></div>
-					</div>
-				</div>
+				
 		</div>		
 
 <!-- footer -->
      <div>
-          
-    <!-- 统计信息 -->
-    
-    <!-- Piwik -->
-	<script type="text/javascript"> 
-	  var _paq = _paq || [];
-	  _paq.push(['trackPageView']);
-	  _paq.push(['enableLinkTracking']);
-	  (function() {
-	    var u=(("https:" == document.location.protocol) ? "https" : "http") + "://10.15.62.209/piwik//";
-	    _paq.push(['setTrackerUrl', u+'piwik.php']);
-	    _paq.push(['setSiteId', 1]);
-	    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0]; g.type='text/javascript';
-	    g.defer=true; g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-	  })();
-	
-	</script>
-	<noscript><p><img src="http://10.15.62.209/piwik/piwik.php?idsite=1" style="border:0" alt="" /></p></noscript>
-	<!-- End Piwik Code -->
 	
     <link rel="stylesheet" type="text/css" href="/commonpages/css/footer.css"></link>
     <div class="footer" style="margin-bottom:0px;">
@@ -217,5 +184,57 @@
            </div>
        </div>
      </div>
+     <script>
+		alert(1)
+
+var width = 960,
+    height = 500;
+
+var color = d3.scale.category20();
+
+var force = d3.layout.force()
+    .charge(-120)
+    .linkDistance(30)
+    .size([width, height]);
+
+var svg = d3.select(".container-fluid").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+d3.json("/D3JS/data.json", function(error, graph) {
+  force
+      .nodes(graph.nodes)
+      .links(graph.links)
+      .start();
+
+  var link = svg.selectAll(".link")
+      .data(graph.links)
+    .enter().append("line")
+      .attr("class", "link")
+      .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+
+  var node = svg.selectAll(".node")
+      .data(graph.nodes)
+    .enter().append("circle")
+      .attr("class", "node")
+      .attr("r", 5)
+      .style("fill", function(d) { return color(d.group); })
+      .call(force.drag);
+
+  node.append("title")
+      .text(function(d) { return d.name; });
+
+  force.on("tick", function() {
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    node.attr("cx", function(d) { return d.x; })
+        .attr("cy", function(d) { return d.y; });
+  });
+});
+
+</script>
 
 </BODY></HTML>

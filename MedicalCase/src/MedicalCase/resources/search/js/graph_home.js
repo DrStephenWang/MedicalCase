@@ -30,7 +30,7 @@ $(function() {
 function getFrontListSuccessCB(data,textStatus,jqXHR) {
     
     alert("received");
-    window.location.href='index';
+    window.location.href='graphsearch';
     
 }
 

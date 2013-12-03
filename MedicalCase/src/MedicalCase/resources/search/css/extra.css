@@ -10,6 +10,18 @@
 	margin-bottom:60px;*/
 }
 
+.container-fluid-docinfo,.search_list_table{
+    /*background-image:url(../Images/content_bg_03.jpg);*/
+    font-family:"寰蒋闆呴粦";
+	font-size:15px;
+	background-repeat:repeat-y;
+	width:960px;
+	min-height:100px;
+	margin:0 auto;
+	/*margin-left:160px;
+	margin-bottom:60px;*/
+}
+
 #front_search_table{
 	min-width:860px
 }

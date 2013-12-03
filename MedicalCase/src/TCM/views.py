@@ -22,20 +22,20 @@ def front(request):
             
     return render_to_response('front.html')
 
-def classifybrows(request):
+def classifyBrows(request):
     
     return render_to_response('classifybrows.html')
 
-def doctorpage(request):
+def doctorPage(request):
     return render_to_response('doctorpage.html')
     
-def seniorsearch(request):
+def seniorSearch(request):
     return render_to_response('seniorsearch.html')
 
-def casedetail(request):
+def caseDetail(request):
     return render_to_response('casedetail.html')
     
-def dislist(request):
+def disList(request):
      response=HttpResponse()
      disname=request.POST.get('disname',None)
      pageNo=request.POST.get('pageno',None)
@@ -63,7 +63,7 @@ def dislist(request):
      response.write(data)
      return response
  
-def disclist(request):
+def discList(request):
     response=HttpResponse()
     discword=request.POST.get('discword',None)
     pageNo=request.POST.get('pageno',None)
@@ -90,7 +90,7 @@ def disclist(request):
     response.write(data)
     return response
     
-def therlist(request):
+def therList(request):
     response=HttpResponse()
     ther=request.POST.get('ther',None)
     pageNo=request.POST.get('pageno',None)
@@ -118,7 +118,7 @@ def therlist(request):
     return response
     
     
-def doctorresultlist(request):
+def doctorResultList(request):
         response=HttpResponse()
         drname=request.POST.get('drname',None)
         pageNo=request.POST.get('pageno',None)
@@ -148,11 +148,11 @@ def doctorresultlist(request):
         response.write(data)
         return response
 
-def frontsearch(request):
+def frontSearch(request):
     return render_to_response('frontsearch.html')
         
 
-def frontresultlist(request):
+def frontResultList(request):
     response=HttpResponse()
 #     response['Content-Type']="text/javascript" 
     keyword = request.POST.get('keyword',None)
@@ -196,14 +196,14 @@ def frontresultlist(request):
         for j in range(pageSize):
             if (pageNo-1)*pageSize+j>=i:
                 break
-            list.append({"field1":str(retval[(pageNo-1)*pageSize+j]["fields"]["drid"]),"field2":retval[(pageNo-1)*pageSize+j]["fields"]["casename"]})   
+            list.append({"field1":str(retval[(pageNo-1)*pageSize+j]["fields"]["drname"]),"field2":retval[(pageNo-1)*pageSize+j]["fields"]["casename"]})   
         data['count']=i
         data['list']=list
         data=json.dumps(data,ensure_ascii=False)
         response.write(data)
         return response
     
-def casedetailinfo(request):
+def caseDetailInfo(request):
     response=HttpResponse()
     casename=request.POST.get('casename',None)
     print(casename)
@@ -222,7 +222,7 @@ def casedetailinfo(request):
         response.write(data)
     return response
 
-def graphresultlist(request):
+def graphResultList(request):
      response=HttpResponse()
      keyword = request.POST.get('keyword',None)
      layer=2
@@ -273,7 +273,7 @@ def graphSearchResult(keyword):
 def graph(request):
     return render_to_response('graph.html')
 
-def graphsearch(request):
+def graphSearch(request):
     return render_to_response('graphsearch.html')    
        
 def index(request):
