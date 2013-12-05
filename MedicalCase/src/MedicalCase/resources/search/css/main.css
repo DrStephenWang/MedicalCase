@@ -384,3 +384,15 @@ INPUT {
 .footer_copy .join A.qqun {
 	backgound-position: 0px -746px
 }
+
+
+
+#list_doc_intro {
+	text-align:left
+}
+#casedetail_list{
+	text-align:left
+}
+#graph_text{
+	cursor:pointer
+}

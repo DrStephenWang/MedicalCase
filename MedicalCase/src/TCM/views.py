@@ -249,10 +249,26 @@ def graphResultList(request):
                  data['links'].append(link)
                  
      data=json.dumps(data,ensure_ascii=False)
+     print data
+     f=open('D:/MedicalCase/MedicalCase/src/MedicalCase/resources/D3JS/data2.json','w')
+     f.truncate()
+     f.write(data)
+     f.close()
+     response.write(data)
+     return response
+ 
+def graphResultList2(request):
+     response=HttpResponse()
+     keyword = request.POST.get('keyword',None)
+     dataInit={'name': keyword,'children':[]}
+     data=generateData(dataInit,2)
+        
+     data=json.dumps(data,ensure_ascii=False)
      f=open('D:/MedicalCase/MedicalCase/src/MedicalCase/resources/D3JS/data.json','w')
      f.truncate()
      f.write(data)
      f.close()
+     response.write(data)
      return response
 
 def graphSearchResult(keyword):
@@ -270,6 +286,34 @@ def graphSearchResult(keyword):
      
      return retval
  
+def generateData(data,layer):
+    if layer==0:
+        return
+    retval=graphSearchResult(data['name'])
+    count=0
+    for i in range(len(retval)):
+        if count>5:
+            break
+        if retval[i]['fields']['text1'].find(data['name'])!=-1:
+            text='text2'
+        else:
+            text='text1'
+        isSame=False
+        for eachChild in data['children']:
+            if  eachChild['name']==retval[i]['fields'][text]:
+                isSame=True
+                break
+        if isSame:
+            continue
+        child={}
+        child['name']=retval[i]['fields'][text]
+        child['children']=[]
+        data['children'].append(child)
+        count+=1
+    for eachChild in data['children']:
+         generateData(eachChild,layer-1)
+    return data
+    
 def graph(request):
     return render_to_response('graph.html')
 
@@ -278,3 +322,7 @@ def graphSearch(request):
        
 def index(request):
     return render_to_response('index.html')
+def test(request):
+    return render_to_response('test.html')
+def test2(request):
+    return render_to_response('test2.html')

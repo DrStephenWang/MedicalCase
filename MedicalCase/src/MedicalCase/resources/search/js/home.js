@@ -116,7 +116,6 @@ function getFrontList() {
 
 function getFrontListSuccessCB(data,textStatus,jqXHR) {
     
-    alert("received");
     data=eval('(' + data + ')');
 	var typeEn = typeChToEn(decodeURI(getUrlParam("type")));
 	var table = listToTable(data.list, typeEn);

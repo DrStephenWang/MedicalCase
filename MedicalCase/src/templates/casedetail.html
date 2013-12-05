@@ -38,16 +38,14 @@
 		
 		function getCaseDetailSuccessCB(data,textStatus,jqXHR)
 		{
-			alert("received");
 		    data=eval('(' + data + ')');
 			var table = "";
 			var field1 = data.list.field1;
 			var field2 = data.list.field2;
 			var field3 = data.list.field3;
-			table += "<tr><td>诊查</td><td class='list_field'>" + field1.substring(field1.indexOf("诊查")+3) + "</td></tr>";
-			table += "<tr><td>辨证</td><td class='list_field'>" + field2.substring(field2.indexOf("辨证")+3) + "</td></tr>";
-			table += "<tr><td>治法</td><td class='list_field'>" + field3.substring(field3.indexOf("治法")+3) + "</td></tr>";
-			
+			table += "<tr><td>辨证</td><td class='list_field' id='casedetail_list'>" + field2.substring(field2.indexOf("辨证")+3) + "</td></tr>";
+			table += "<tr><td>治法</td><td class='list_field' id='casedetail_list'>" + field3.substring(field3.indexOf("治法")+3) + "</td></tr>";
+			table += "<tr><td>诊查</td><td class='list_field' id='casedetail_list'>" + field1.substring(field1.indexOf("诊查")+3) + "</td></tr>";
 			$("#case_detail_list_info").html(table);
 		}
 		

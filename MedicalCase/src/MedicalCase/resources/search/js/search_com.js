@@ -71,14 +71,13 @@ function listToTable(data,type){
         var listClass="";
         if (type=='doctor'){
         	var prefix = "<tr><td class='list_field1'><a href='#' class='doctor_list_name'>";
-        	var medInfo = prefix + field1 +"</a></td><td class='list_field2'>" + field2 + "</td></tr>";
+        	var medInfo = prefix + field1 +"</a></td><td class='list_field2' id='list_doc_intro'>" + field2 + "</td></tr>";
         }
         else{
         	var prefix = "<tr><td class='list_field1'><a href='#' class='doctor_list_name'>";
         	var medInfo = prefix + field1 +"</a></td><td class='list_field2'><a href='#' class='case_list_name'>" + field2 + "</a></td></tr>";
         }
-        if(field1==null||field1=="")
-        	medInfo = "<tr><td></td><td class='list_field2'><a href='#' class='" + type+"_list_name'>"+field2+"</a></td></tr>";
+        
         table += medInfo;
     }
 	
