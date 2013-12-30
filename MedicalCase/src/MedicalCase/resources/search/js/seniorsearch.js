@@ -165,7 +165,11 @@ function getDisSearchType(){
 		   + '<li><a href="#" id="classify_disc">&nbsp;辩证&nbsp;</a></li></ul>';
 	$("#navcontainer").html(string);
 	//
-	tempArray = new Array("伤寒","头痛","哮喘","胃痛","头晕","泄泻","水肿","疟疾","腹痛","鼻炎","痛痹","黄疸","头风","闭经","呕吐","咳血","反胃","健忘","血淋","失眠","挫伤","癫痫","咳嗽","痛经");
+	tempArray = new Array("胃脘","胁痛","痛经","痹证","咳嗽","癃闭","不孕","闭经","遗尿","脑炎","痿证","胃痛",
+			"癫痫","肺炎","遗精","喘证","耳聋","肾病","咳血","胃炎","虚劳","咯血","失眠","肾炎","口疮","噎膈","淋证",
+			"湿疹","痢疾","肺痨","乳糜","血证","伏暑","反胃","红斑","心衰","肺癌","胃癌","血崩","偏瘫","吐血","失音",
+			"子痫","肝硬化","关节炎","糖尿病","高血压","结肠炎","冠心病","荨麻疹","偏头痛","心绞痛","白血病","肠梗阻","尿毒症","心肌炎","心脏病",
+			"银屑病","乙型肝炎");
 	table = "";
 	table += "<table id='mian-table'><th class='c-left'></th><th class='c-right'></th>"
 		  +	"<tr><td  class='c-left-text'>常见疾病:</td><td class='c-right-text'>";
@@ -187,7 +191,7 @@ function getDiscSearchType(){
 		   + '<li><a href="#" id="classify_disc">&nbsp;辩证&nbsp;</a></li></ul>';
 	$("#navcontainer").html(string);
 	//
-	tempArray = new Array("肝","胃","心火","肾虚","阴虚","伤寒","风湿");
+	tempArray = new Array("湿热","气滞","气虚","脾虚","阴虚","寒湿","淤血","肾虚","风邪","少阳","阳虚","冲任","血虚","风寒","郁热","虚寒","寒邪","三焦","中焦","津液","内热","血亏","风湿","无力","炽盛","寒热","心包","肝火","郁滞","中气","入营","心悸","肾亏","生风","肾阳虚","肾阴虚");
 	table = "";
 	table += "<table id='mian-table'><th class='c-left'></th><th class='c-right'></th>"
 		  +	"<tr><td  class='c-left-text'>辩证:</td><td class='c-right-text'>";
@@ -208,7 +212,7 @@ function getTherSearchType(){
 		   + '<li><a href="#" id="classify_disc">&nbsp;辩证&nbsp;</a></li></ul>';
 	$("#navcontainer").html(string);
 	//
-	tempArray = new Array("安神","清热","化瘀","养血","健脾","活血","化痰");
+	tempArray = new Array("清热","益气","健脾","活血","化痰","通络","养血","解毒","滋阴","疏肝","熄风","补肾","温阳","理气","止血","宣肺","开窍","祛风","利水","止痛","安神","散结","补气","补血","除湿","养心","生津","温中","补益","解郁","消肿","降火","止咳","止痒","利尿","活血化瘀","清热解毒","疏肝理气","平肝潜阳","行气活血","");
 	table = "";
 	table += "<table id='mian-table'><th class='c-left'></th><th class='c-right'></th>"
 		  +	"<tr><td  class='c-left-text'>治则:</td><td class='c-right-text'>";

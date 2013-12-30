@@ -65,14 +65,14 @@ text-align:center;
 	height: 102px;
 	margin-right:40px;
 	margin-left:110.5px;
-	background-image:url(../Images/2_12.png); 
+	background-image:url(../Images/2_19.png); 
 	float: left; 
 	display:block;
 }
 a#href_A:hover{
 	margin-right:40px;
 	margin-left:110.5px;
-	background-image:url(../Images/2_19.png);
+	background-image:url(../Images/2_12.png);
 }
 
 #href_B{

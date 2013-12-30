@@ -56,7 +56,7 @@ def disList(request):
      for j in range(pageSize):
          if (pageNo-1)*pageSize+j>=i:
              break
-         list.append({"field1":str(retval[(pageNo-1)*pageSize+j]["fields"]["drid"]),"field2":retval[(pageNo-1)*pageSize+j]["fields"]["casename"]})
+         list.append({"field1":str(retval[(pageNo-1)*pageSize+j]["fields"]["drname"]),"field2":retval[(pageNo-1)*pageSize+j]["fields"]["casename"]})
      data['count']=i
      data['list']=list
      data=json.dumps(data,ensure_ascii=False)
@@ -83,7 +83,7 @@ def discList(request):
     for j in range(pageSize):
         if (pageNo-1)*pageSize+j>=i:
             break
-        list.append({"field1":str(retval[(pageNo-1)*pageSize+j]["fields"]["drid"]),"field2":retval[(pageNo-1)*pageSize+j]["fields"]["casename"]})
+        list.append({"field1":str(retval[(pageNo-1)*pageSize+j]["fields"]["drname"]),"field2":retval[(pageNo-1)*pageSize+j]["fields"]["casename"]})
     data['count']=i
     data['list']=list
     data=json.dumps(data,ensure_ascii=False)
@@ -110,7 +110,7 @@ def therList(request):
     for j in range(pageSize):
         if (pageNo-1)*pageSize+j>=i:
             break
-        list.append({"field1":str(retval[(pageNo-1)*pageSize+j]["fields"]["drid"]),"field2":retval[(pageNo-1)*pageSize+j]["fields"]["casename"]})
+        list.append({"field1":str(retval[(pageNo-1)*pageSize+j]["fields"]["drname"]),"field2":retval[(pageNo-1)*pageSize+j]["fields"]["casename"]})
     data['count']=i
     data['list']=list
     data=json.dumps(data,ensure_ascii=False)
@@ -264,10 +264,6 @@ def graphResultList2(request):
      data=generateData(dataInit,2)
         
      data=json.dumps(data,ensure_ascii=False)
-     f=open('D:/MedicalCase/MedicalCase/src/MedicalCase/resources/D3JS/data.json','w')
-     f.truncate()
-     f.write(data)
-     f.close()
      response.write(data)
      return response
 
@@ -283,7 +279,8 @@ def graphSearchResult(keyword):
      retval3=serializers.serialize("json",result3)
      retval3=json.loads(retval3)
      retval=retval1+retval2+retval3
-     
+     print type(retval)
+     retval=sorted(retval,key=lambda connect: float(connect['fields']['num1']),reverse=True)
      return retval
  
 def generateData(data,layer):

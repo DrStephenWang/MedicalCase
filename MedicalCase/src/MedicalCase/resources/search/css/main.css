@@ -394,5 +394,6 @@ INPUT {
 	text-align:left
 }
 #graph_text{
-	cursor:pointer
+	cursor:pointer;
+	font-size: 150%
 }
