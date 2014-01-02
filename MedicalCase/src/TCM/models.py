@@ -79,4 +79,14 @@ class Medicalcase(models.Model):
     class Meta:
         db_table = 'medicalcase_copy_copy'
     def __unicode__(self):
-        return u'%s %s %s %s %s' % (self.casename,self.diagnosis,self.therapy,self.discrimination,self.drname)    
+        return u'%s %s %s %s %s' % (self.casename,self.diagnosis,self.therapy,self.discrimination,self.drname)
+
+class Aggregation(models.Model):
+    id = models.AutoField(primary_key=True,db_column='id')
+    keyword = models.CharField(max_length=50L, db_column='keyword', blank=True)
+    type = models.CharField(max_length=20L, db_column='type', blank=True)
+    count = models.IntegerField(db_column='count')
+    class Meta:
+        db_table = 'medicalcase_aggregation'
+    def __unicode__(self):
+        return u'%s %s' % (self.keyword,self.type) 

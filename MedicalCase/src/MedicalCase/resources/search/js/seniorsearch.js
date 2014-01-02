@@ -69,7 +69,7 @@ function getTherList()
 {
 	var dataJson=
 		{
-			"ther": decodeURI(getUrlParam("ther")),
+			"therword": decodeURI(getUrlParam("therword")),
 			"pageno": parseInt(getUrlParam("pageno")),
 			"pagesize":pageSize
 		};
@@ -221,7 +221,7 @@ function getTherSearchType(){
 	
 	table += "</td></tr>";
 	$('.dis_type_list').live('click', function () {			
-		window.open("seniorsearch?discword=" + $(this).text() + "&type=disc&pageno=1");
+		window.open("seniorsearch?therword=" + $(this).text() + "&type=ther&pageno=1");
 	});
 	
 	$("#mian-table").html(table + "</table>");

@@ -25,16 +25,19 @@ urlpatterns = patterns('',
     ('^seniorsearch$', 'TCM.views.seniorSearch'),
     ('^dislist$', 'TCM.views.disList'),
     ('^disclist$', 'TCM.views.discList'),
+    ('^therlist', 'TCM.views.therList'),
     ('^casedetail$', 'TCM.views.caseDetail'),
     ('^casedetailinfo$', 'TCM.views.caseDetailInfo'),
     ('^graph$', 'TCM.views.graph'),
     ('^graphsearch$', 'TCM.views.graphSearch'),
     ('^graphresultlist$', 'TCM.views.graphResultList2'),
     ('^index$', 'TCM.views.index'),
+    ('^error$', 'TCM.views.error'),
     ('^test$', 'TCM.views.test'),
     ('^test2$', 'TCM.views.test2'),
-       
-    (r'^(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_URL}) 
+    
+    (r'^(?P<path>.*)$', 'TCM.views.chain')  
+    #(r'^(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_URL}) 
 
 
 )

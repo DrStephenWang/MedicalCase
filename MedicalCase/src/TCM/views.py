@@ -2,9 +2,11 @@
 #encoding=utf-8
 from django.shortcuts import render_to_response
 from django.db.models import Q
+from django.views.static import serve
+from django.conf import settings
 from TCM.models import Doctor
 from TCM.models import Medicalcase
-from TCM.models import Medicalcase
+from TCM.models import Aggregation
 from TCM.models import ResultMedAndPre
 from TCM.models import ResultWithoutMedicine
 from TCM.models import ResultSymptomAndDisease
@@ -17,6 +19,7 @@ import json
 import string
 from django.core import serializers
 
+VISITTIMES = -1
  
 def front(request):
             
@@ -27,12 +30,29 @@ def classifyBrows(request):
     return render_to_response('classifybrows.html')
 
 def doctorPage(request):
+    pageNo=string.atoi(request.GET.get('pageno',None))
+    if pageNo==1:
+        drname = request.GET.get('drname',None)
+        aggregation(request,drname,'doctorsearch')
     return render_to_response('doctorpage.html')
     
 def seniorSearch(request):
+    pageNo=string.atoi(request.GET.get('pageno',None))
+    if pageNo==1:
+        type = request.GET.get('type',None)
+        keyword =''
+        if type=='dis':
+            keyword = request.GET.get('disname',None)
+        elif type=='ther':
+            keyword = request.GET.get('therword',None)
+        elif type== 'disc':
+            keyword = request.GET.get('discword',None)
+        aggregation(request,keyword,type+'search')
     return render_to_response('seniorsearch.html')
 
 def caseDetail(request):
+    casename = request.GET.get('casename',None)
+    aggregation(request,casename,'casesearch')
     return render_to_response('casedetail.html')
     
 def disList(request):
@@ -92,7 +112,7 @@ def discList(request):
     
 def therList(request):
     response=HttpResponse()
-    ther=request.POST.get('ther',None)
+    ther=request.POST.get('therword',None)
     pageNo=request.POST.get('pageno',None)
     pageSize=request.POST.get('pagesize',None)
     pageNo=string.atoi(pageNo)
@@ -149,8 +169,11 @@ def doctorResultList(request):
         return response
 
 def frontSearch(request):
+    pageNo=string.atoi(request.GET.get('pageno',None))
+    if pageNo==1:
+        keyword = request.GET.get('keyword',None)
+        aggregation(request,keyword,'frontsearch')
     return render_to_response('frontsearch.html')
-        
 
 def frontResultList(request):
     response=HttpResponse()
@@ -315,10 +338,55 @@ def graph(request):
     return render_to_response('graph.html')
 
 def graphSearch(request):
+    keyword=request.GET.get('keyword',None)
+    aggregation(request,keyword,'graphsearch')
     return render_to_response('graphsearch.html')    
-       
+
+def chain(request,path):
+    try:
+        referer=request.META['HTTP_REFERER']
+        if(referer.find('127.0.0.1')!=-1):
+            return serve(request,path,settings.STATIC_URL)
+        else:
+            print("antiStealingChain:  "+path)
+            path="search/Images/chain.jpg"
+            return serve(request,path,settings.STATIC_URL)
+    except:
+        return serve(request,path,settings.STATIC_URL)
+    
+def aggregation(request,keyword,type):
+    global VISITTIMES
+    if VISITTIMES<0:
+        file = open('D:/MedicalCase/MedicalCase/src/MedicalCase/resources/visittimes.txt')
+        try:
+            VISITTIMES = string.atoi(file.read())
+        except:
+            VISITTIMES = 0
+        finally:
+            file.close()
+    VISITTIMES += 1
+    file = open('D:/MedicalCase/MedicalCase/src/MedicalCase/resources/visittimes.txt','w')
+    try:
+        file.write(str(VISITTIMES))
+    finally:
+        file.close()
+    
+    inf = Aggregation.objects.filter(keyword__exact=keyword).filter(type__exact=type)
+    if len(inf)==0:
+        result = Aggregation()
+        result.keyword = keyword
+        result.type = type
+        result.count = 1
+    else:
+        result = Aggregation.objects.get(id__exact=inf[0].id)
+        result.count += 1
+    result.save()
+    print str(VISITTIMES)+':  type='+type+'  keyword='+keyword+'  count='+str(result.count)
+
 def index(request):
     return render_to_response('index.html')
+def error(request):
+    return render_to_response('errorpage.html')
 def test(request):
     return render_to_response('test.html')
 def test2(request):
