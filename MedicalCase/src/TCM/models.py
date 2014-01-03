@@ -89,4 +89,13 @@ class Aggregation(models.Model):
     class Meta:
         db_table = 'medicalcase_aggregation'
     def __unicode__(self):
-        return u'%s %s' % (self.keyword,self.type) 
+        return u'%d %s %s' % (self.keyword,self.type,self.count) 
+
+class Accesstime(models.Model):
+    id = models.AutoField(primary_key=True,db_column='id')
+    ip = models.CharField(max_length=20L, db_column='ip', blank=True)
+    accesstime = models.CharField(max_length=50L,db_column='accesstime')
+    class Meta:
+        db_table = 'medicalcase_access_record'
+    def __unicode__(self):
+        return u'%s %s' % (self.ip,self.accesstime) 

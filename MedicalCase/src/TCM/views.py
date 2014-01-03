@@ -7,17 +7,19 @@ from django.conf import settings
 from TCM.models import Doctor
 from TCM.models import Medicalcase
 from TCM.models import Aggregation
+from TCM.models import Accesstime
 from TCM.models import ResultMedAndPre
 from TCM.models import ResultWithoutMedicine
 from TCM.models import ResultSymptomAndDisease
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.template import RequestContext 
-import datetime
 import MySQLdb
 import json
 import string
 from django.core import serializers
+from datetime import datetime,timedelta
+import time
 
 VISITTIMES = -1
  
@@ -33,7 +35,10 @@ def doctorPage(request):
     pageNo=string.atoi(request.GET.get('pageno',None))
     if pageNo==1:
         drname = request.GET.get('drname',None)
-        aggregation(request,drname,'doctorsearch')
+        if accesstest(request):
+            aggregation(request,drname,'doctorsearch')
+        else:
+            return render_to_response('errorpage.html')
     return render_to_response('doctorpage.html')
     
 def seniorSearch(request):
@@ -47,12 +52,18 @@ def seniorSearch(request):
             keyword = request.GET.get('therword',None)
         elif type== 'disc':
             keyword = request.GET.get('discword',None)
-        aggregation(request,keyword,type+'search')
+        if accesstest(request):
+            aggregation(request,keyword,type+'search')
+        else:
+            return render_to_response('errorpage.html')
     return render_to_response('seniorsearch.html')
 
 def caseDetail(request):
     casename = request.GET.get('casename',None)
-    aggregation(request,casename,'casesearch')
+    if accesstest(request):
+        aggregation(request,casename,'casesearch')
+    else:
+        return render_to_response('errorpage.html')
     return render_to_response('casedetail.html')
     
 def disList(request):
@@ -172,7 +183,10 @@ def frontSearch(request):
     pageNo=string.atoi(request.GET.get('pageno',None))
     if pageNo==1:
         keyword = request.GET.get('keyword',None)
-        aggregation(request,keyword,'frontsearch')
+        if accesstest(request):
+            aggregation(request,keyword,'frontsearch')
+        else:
+            return render_to_response('errorpage.html')
     return render_to_response('frontsearch.html')
 
 def frontResultList(request):
@@ -339,7 +353,10 @@ def graph(request):
 
 def graphSearch(request):
     keyword=request.GET.get('keyword',None)
-    aggregation(request,keyword,'graphsearch')
+    if accesstest(request):
+        aggregation(request,keyword,'graphsearch')
+    else:
+        return render_to_response('errorpage.html')
     return render_to_response('graphsearch.html')    
 
 def chain(request,path):
@@ -382,6 +399,26 @@ def aggregation(request,keyword,type):
         result.count += 1
     result.save()
     print str(VISITTIMES)+':  type='+type+'  keyword='+keyword+'  count='+str(result.count)
+
+def accesstest(request):
+    ip=request.META['REMOTE_ADDR'].strip()
+    accessrecord = Accesstime.objects.filter(ip__exact=ip)
+    if len(accessrecord)==0:
+        result = Accesstime()
+        result.ip = ip
+        result.accesstime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        result.save()
+    else:
+        timepiece=timedelta(seconds=1)
+        lasttime=datetime.strptime(accessrecord[0].accesstime,'%Y-%m-%d %H:%M:%S')
+        if  lasttime + timepiece > datetime.now():
+            return False
+        else:
+            result = Accesstime.objects.get(id__exact=accessrecord[0].id)
+            result.accesstime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            result.save()
+    print ip+'   '+result.accesstime
+    return True
 
 def index(request):
     return render_to_response('index.html')
