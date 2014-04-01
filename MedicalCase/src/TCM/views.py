@@ -11,6 +11,8 @@ from TCM.models import Accesstime
 from TCM.models import ResultMedAndPre
 from TCM.models import ResultWithoutMedicine
 from TCM.models import ResultSymptomAndDisease
+from TCM.models import Word2topic
+from TCM.models import Case2topic
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.template import RequestContext 
@@ -57,6 +59,35 @@ def seniorSearch(request):
         else:
             return render_to_response('errorpage.html')
     return render_to_response('seniorsearch.html')
+
+def caseTopicSearch(keyword):
+    list = []
+    result = Word2topic.objects.filter(word__exact=keyword)
+    retval=serializers.serialize("json",result)
+    retval=json.loads(retval)
+    
+    if len(result)==0:
+        return list
+    
+    result = Case2topic.objects.all()
+    allCase = serializers.serialize("json",result)
+    allCase = json.loads(allCase)
+    similarity = 0
+    
+    for eachCase in allCase:
+        for i in range(1,51):
+            similarity += eachCase["fields"]["topic"+str(i)]*retval[0]["fields"]["topic"+str(i)]
+        if similarity!=0:
+            list.append({"caseid":eachCase["pk"],"similarity":similarity})
+        similarity=0
+    
+    for i in range(len(list)-1):
+        for j in range(len(list)-1-i):
+            if list[j]["similarity"]<list[j+1]["similarity"]:
+                tmp = list[j+1];
+                list[j+1] = list[j];
+                list[j] = tmp;
+    return list
 
 def caseDetail(request):
     casename = request.GET.get('casename',None)
@@ -193,6 +224,7 @@ def frontResultList(request):
     response=HttpResponse()
 #     response['Content-Type']="text/javascript" 
     keyword = request.POST.get('keyword',None)
+    caselist = caseTopicSearch(keyword)
     type=request.POST.get('type',None)
     pageNo=request.POST.get('pageno',None)
     pageSize=request.POST.get('pagesize',None)
@@ -221,24 +253,39 @@ def frontResultList(request):
                 
   
     if keyword  and type=="other" :
-        response=HttpResponse()
-        result = Medicalcase.objects.filter(Q(casename__icontains=keyword)|Q(diagnosis__icontains=keyword)|Q(therapy__icontains=keyword)|Q(discrimination__icontains=keyword))
-        retval = serializers.serialize("json", result)
-        retval=json.loads(retval)
-        i=0
-        data={}
-        list=[]
-        for eachCase in retval:
-           i+=1
-        for j in range(pageSize):
-            if (pageNo-1)*pageSize+j>=i:
-                break
-            list.append({"field1":str(retval[(pageNo-1)*pageSize+j]["fields"]["drname"]),"field2":retval[(pageNo-1)*pageSize+j]["fields"]["casename"]})   
-        data['count']=i
-        data['list']=list
-        data=json.dumps(data,ensure_ascii=False)
-        response.write(data)
-        return response
+        if len(caselist)!=0:
+            i=len(caselist)
+            list=[]
+            data={}
+            for j in range(pageSize):
+                if (pageNo-1)*pageSize+j>=i:
+                    break;
+                result=Medicalcase.objects.get(caseid__exact=caselist[j]["caseid"])
+                list.append({"field1":result.drname,"field2":result.casename})
+            data['count']=i
+            data['list']=list
+            data=json.dumps(data,ensure_ascii=False)
+            response.write(data)
+            return response
+        else:
+            response=HttpResponse()
+            result = Medicalcase.objects.filter(Q(casename__icontains=keyword)|Q(diagnosis__icontains=keyword)|Q(therapy__icontains=keyword)|Q(discrimination__icontains=keyword))
+            retval = serializers.serialize("json", result)
+            retval=json.loads(retval)
+            i=0
+            data={}
+            list=[]
+            for eachCase in retval:
+               i+=1
+            for j in range(pageSize):
+                if (pageNo-1)*pageSize+j>=i:
+                    break
+                list.append({"field1":str(retval[(pageNo-1)*pageSize+j]["fields"]["drname"]),"field2":retval[(pageNo-1)*pageSize+j]["fields"]["casename"]})   
+            data['count']=i
+            data['list']=list
+            data=json.dumps(data,ensure_ascii=False)
+            response.write(data)
+            return response
     
 def caseDetailInfo(request):
     response=HttpResponse()
@@ -304,6 +351,35 @@ def graphResultList2(request):
      response.write(data)
      return response
 
+def graphResultList3(request):
+    response=HttpResponse()
+    keyword = request.POST.get('keyword',None)
+    retval=graphSearchResult(keyword)
+    data={'keyword': keyword,'pre':[],'med':[],'sym':[],'dis':[]}
+    count= {'pre':0,'med':0,'sym':0,'dis':0}
+    for i in range(len(retval)):
+        if retval[i]['fields']['text1'].find(keyword)!=-1:
+            text='text2'
+            type=retval[i]['fields']['type2']
+        else:
+            text='text1'
+            type=retval[i]['fields']['type1']
+        if (not type in count) or (count[type]>=15):
+            continue
+        isSame=False
+        for eachChild in data[type]:
+            if  eachChild==retval[i]['fields'][text]:
+                isSame=True
+                break
+        if isSame:
+            continue
+        data[type].append(retval[i]['fields'][text])
+        count[type]+=1
+    print data
+    data=json.dumps(data,ensure_ascii=False)
+    response.write(data)
+    return response
+
 def graphSearchResult(keyword):
      
      result1=ResultMedAndPre.objects.filter(Q(text1__icontains=keyword)|Q(text2__icontains=keyword))
@@ -316,11 +392,12 @@ def graphSearchResult(keyword):
      retval3=serializers.serialize("json",result3)
      retval3=json.loads(retval3)
      retval=retval1+retval2+retval3
-     print type(retval)
      retval=sorted(retval,key=lambda connect: float(connect['fields']['num1']),reverse=True)
      return retval
  
 def generateData(data,layer):
+    #D3.js version
+    
     if layer==0:
         return
     retval=graphSearchResult(data['name'])

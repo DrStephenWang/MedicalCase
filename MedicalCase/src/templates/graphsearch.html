@@ -12,9 +12,22 @@
 		<script src="/search/js/graph_search_com.js"></script>
 		<script src="/search/js/csrf.js"></script>
 		<script src="/search/js/graph_home.js"></script>
-		<script src="http://d3js.org/d3.v3.min.js"></script>
-		
+		<script src="/D3JS/d3.min.js"></script>
 		<style>
+
+		.medcase{
+		border-collapse: collapse;
+		color: rgb(157, 117, 42);
+		cursor: auto;
+		display: inline;
+		font-family: 微软雅黑;
+		font-size: x-large;
+		height: auto;
+		line-height: 30px;
+		text-align: center;
+		text-decoration: none solid rgb(157, 117, 42);
+		width: auto;
+		}
 
 		.node circle {
   		fill: #fff;
@@ -37,7 +50,7 @@
 	
 		<!-- exlib -->
 		<script src="/exlib/md5/md5.js"></script>
-		<script src="//search/js/bootstrap.min.js"></script>
+		<script src="/search/js/bootstrap.min.js"></script>
 		<script src="/exlib/simple_pagination/jquery.simplePagination.js"></script>
 		
 		
@@ -111,9 +124,96 @@
 		<div id="underline"></div>
 		<div class="clearfix"></div>
 		
-		<div class="container-fluid ">
-				
-		</div>		
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="span2" style="text-align:center;">
+				    <div class="panel-heading" style="font-size:large;background-color:#8A4B08;color:#fff;">搜索结果</div>
+					<div class="accordion" id="accordion1">
+						<div class="accordion-group" id="accordion-groupdis">
+							<div class="accordion-heading" style="font-style:bold;font-size:xx-large;font-family:Times New Roman,Serif;">
+								 <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion1" href="#accordion-element1">疾病</a>
+							</div>
+							<div id="accordion-element1" class="accordion-body collapse">
+								<div class="accordion-inner" id="accordion-innerdis" style="font-size:large;">
+								</div>
+							</div>
+						</div>
+						<div class="accordion-group" id="accordion-groupsym">
+							<div class="accordion-heading" style="font-style:bold;font-size:xx-large;font-family:Times New Roman,Serif;">
+								 <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion1" href="#accordion-element2">症状</a>
+							</div>
+							<div id="accordion-element2" class="accordion-body collapse">
+								<div class="accordion-inner" id="accordion-innersym" style="font-size:large;">
+								</div>
+							</div>
+						</div>
+						<div class="accordion-group" id="accordion-groupmed">
+							<div class="accordion-heading" style="font-style:bold;font-size:xx-large;font-family:Times New Roman,Serif;">
+								 <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion1" href="#accordion-element3">药物</a>
+							</div>
+							<div id="accordion-element3" class="accordion-body collapse">
+								<div class="accordion-inner" id="accordion-innermed" style="font-size:large;">
+								</div>
+							</div>
+						</div>
+						<div class="accordion-group" id="accordion-grouppre">
+							<div class="accordion-heading" style="font-style:bold;font-size:xx-large;font-family:Times New Roman,Serif;">
+								 <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion1" href="#accordion-element4">方剂</a>
+							</div>
+							<div id="accordion-element4" class="accordion-body collapse">
+								<div class="accordion-inner" id="accordion-innerpre" style="font-size:large;">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="span4" style="text-align:center;">
+				    <div class="panel-heading" style="font-size:large;background-color:#886A08;color:#eee;">相关医生</div>
+					<div class="carousel slide" id="carousel-4590">
+						<ol class="carousel-indicators">
+							<li class="active" data-slide-to="0" data-target="#carousel-4590">
+							</li>
+							<li data-slide-to="1" data-target="#carousel-4590">
+							</li>
+							<li data-slide-to="2" data-target="#carousel-4590">
+							</li>
+						</ol>
+						<div class="carousel-inner">
+							<div class="item active">
+								<img alt="" id="image1" src="image/1/1.jpg" width="305"/>
+								<a href="">刘阵冬</a>
+							</div>
+							<div class="item">
+								<img alt="" id="image2" src="image/1/1.jpg" width="305"/>
+								<a href="">刘阵冬</a>
+							</div>
+							<div class="item">
+								<img alt="" id="image3" src="image/1/1.jpg" width="305"/>
+								<a href="">刘阵冬</a>
+							</div>
+						</div> 
+						<a data-slide="prev" href="#carousel-4590" class="left carousel-control">‹</a> <a data-slide="next" href="#carousel-4590" class="right carousel-control">›</a>
+					</div>
+				</div>
+				<div class="span6" style="text-align:center;">
+				    <div class="panel-heading" style="font-size:large;background-color:#868A08;color:#fff;">相关病例</div>
+					<div>
+						<ul>
+							<li><a class="medcase">辨证施治治愈水肿四例</a></li>
+							<li><a class="medcase">温中健脾、祛风和络法治愈邪毒内陷一例</a></li>
+							<li><a class="medcase">滋养肝肾、平潜虚阳法治愈阴虚阳越一例</a></li>
+							<li><a class="medcase">补肾脾、养气血法治愈阴阳两虚一例</a></li>
+							<li><a class="medcase">气血双补法治愈肾劳一例</a></li>
+							<li><a class="medcase">独活寄生汤治愈湿热下注一例</a></li>
+							<li><a class="medcase">淡渗化湿、脾肾同治法洽愈尿浊一例</a></li>
+							<li><a class="medcase">化湿祛痰、益肾通络法治愈腰痛一例</a></li>
+							<li><a class="medcase">冬虫夏草为主治愈虚劳一例</a></li>
+							<li><a class="medcase">温清并用、补泻兼施法治愈肾咳一例</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
 
 <!-- footer -->
      <div>

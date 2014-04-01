@@ -33,6 +33,8 @@ function getFrontGraph(){
 
 function getFrontListSuccessCB(data,textStatus,jqXHR) {
     
+    //D3.js version
+	/*
     var width = 960,
     height = 800;
 
@@ -78,7 +80,29 @@ function getFrontListSuccessCB(data,textStatus,jqXHR) {
 
 
     	d3.select(self.frameElement).style("height", height + "px");
-	}
+    	
+    	
+    */
+    data = eval("("+data+")");
+    for(var key in data)
+    {
+    	if(key!='keyword')
+    	{
+    		id = "accordion-inner"+key;
+    		if(data[key].length!=0)
+    		{
+    			var text='';
+    			for(var i=0;i<data[key].length;i++)
+    				text+= "<a href=''>"+data[key][i]+"</a></br>";
+    			document.getElementById(id).innerHTML = text;
+    		}
+    		else
+    		{
+    			document.getElementById("accordion-group"+key).style.display="none";
+    		}
+    	}
+    }
+}
 
 function getFrontErrorCB(){
 	alert("Error");

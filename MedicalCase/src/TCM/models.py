@@ -29,6 +29,8 @@ class ResultMedAndPre(models.Model):
     num2=models.CharField(max_length=10L,db_column='num2')
     num3=models.CharField(max_length=10L,db_column='num3')
     num4=models.CharField(max_length=10L,db_column='num4')
+    type1=models.CharField(max_length=10L,db_column='type1')
+    type2=models.CharField(max_length=10L,db_column='type2')
     class Meta:
         db_table='resultmedandpre'
     def __unicode__(self):
@@ -42,6 +44,8 @@ class ResultSymptomAndDisease(models.Model):
     num2=models.CharField(max_length=10L,db_column='num2')
     num3=models.CharField(max_length=10L,db_column='num3')
     num4=models.CharField(max_length=10L,db_column='num4')
+    type1=models.CharField(max_length=10L,db_column='type1')
+    type2=models.CharField(max_length=10L,db_column='type2')
     class Meta:
         db_table='resultsymptomanddisease'
     def __unicode__(self):
@@ -55,6 +59,8 @@ class ResultWithoutMedicine(models.Model):
     num2=models.CharField(max_length=10L,db_column='num2')
     num3=models.CharField(max_length=10L,db_column='num3')
     num4=models.CharField(max_length=10L,db_column='num4')
+    type1=models.CharField(max_length=10L,db_column='type1')
+    type2=models.CharField(max_length=10L,db_column='type2')
     class Meta:
         db_table='resultwithoutmedicine'
     def __unicode__(self):
@@ -77,7 +83,7 @@ class Medicalcase(models.Model):
     discrimination = models.TextField(blank=True)
     drname= models.CharField(max_length=10L,db_column='drName')
     class Meta:
-        db_table = 'medicalcase_copy_copy'
+        db_table = 'medicalcase_copy'
     def __unicode__(self):
         return u'%s %s %s %s %s' % (self.casename,self.diagnosis,self.therapy,self.discrimination,self.drname)
 
@@ -89,7 +95,7 @@ class Aggregation(models.Model):
     class Meta:
         db_table = 'medicalcase_aggregation'
     def __unicode__(self):
-        return u'%d %s %s' % (self.keyword,self.type,self.count) 
+        return u'%s %s %d' % (self.keyword,self.type,self.count) 
 
 class Accesstime(models.Model):
     id = models.AutoField(primary_key=True,db_column='id')
@@ -99,3 +105,119 @@ class Accesstime(models.Model):
         db_table = 'medicalcase_access_record'
     def __unicode__(self):
         return u'%s %s' % (self.ip,self.accesstime) 
+    
+class Word2topic(models.Model):
+    wordid = models.IntegerField(primary_key=True,db_column='WordID')
+    word = models.CharField(max_length=50L, db_column='Word')
+    topic1 = models.IntegerField(db_column='Topic1')
+    topic2 = models.IntegerField(db_column='Topic2')
+    topic3 = models.IntegerField(db_column='Topic3')
+    topic4 = models.IntegerField(db_column='Topic4')
+    topic5 = models.IntegerField(db_column='Topic5')
+    topic6 = models.IntegerField(db_column='Topic6')
+    topic7 = models.IntegerField(db_column='Topic7')
+    topic8 = models.IntegerField(db_column='Topic8')
+    topic9 = models.IntegerField(db_column='Topic9')
+    topic10 = models.IntegerField(db_column='Topic10')
+    topic11 = models.IntegerField(db_column='Topic11')
+    topic12 = models.IntegerField(db_column='Topic12')
+    topic13 = models.IntegerField(db_column='Topic13')
+    topic14 = models.IntegerField(db_column='Topic14')
+    topic15 = models.IntegerField(db_column='Topic15')
+    topic16 = models.IntegerField(db_column='Topic16')
+    topic17 = models.IntegerField(db_column='Topic17')
+    topic18 = models.IntegerField(db_column='Topic18')
+    topic19 = models.IntegerField(db_column='Topic19')
+    topic20 = models.IntegerField(db_column='Topic20')
+    topic21 = models.IntegerField(db_column='Topic21')
+    topic22 = models.IntegerField(db_column='Topic22')
+    topic23 = models.IntegerField(db_column='Topic23')
+    topic24 = models.IntegerField(db_column='Topic24')
+    topic25 = models.IntegerField(db_column='Topic25')
+    topic26 = models.IntegerField(db_column='Topic26')
+    topic27 = models.IntegerField(db_column='Topic27')
+    topic28 = models.IntegerField(db_column='Topic28')
+    topic29 = models.IntegerField(db_column='Topic29')
+    topic30 = models.IntegerField(db_column='Topic30')
+    topic31 = models.IntegerField(db_column='Topic31')
+    topic32 = models.IntegerField(db_column='Topic32')
+    topic33 = models.IntegerField(db_column='Topic33')
+    topic34 = models.IntegerField(db_column='Topic34')
+    topic35 = models.IntegerField(db_column='Topic35')
+    topic36 = models.IntegerField(db_column='Topic36')
+    topic37 = models.IntegerField(db_column='Topic37')
+    topic38 = models.IntegerField(db_column='Topic38')
+    topic39 = models.IntegerField(db_column='Topic39')
+    topic40 = models.IntegerField(db_column='Topic40')
+    topic41 = models.IntegerField(db_column='Topic41')
+    topic42 = models.IntegerField(db_column='Topic42')
+    topic43 = models.IntegerField(db_column='Topic43')
+    topic44 = models.IntegerField(db_column='Topic44')
+    topic45 = models.IntegerField(db_column='Topic45')
+    topic46 = models.IntegerField(db_column='Topic46')
+    topic47 = models.IntegerField(db_column='Topic47')
+    topic48 = models.IntegerField(db_column='Topic48')
+    topic49 = models.IntegerField(db_column='Topic49')
+    topic50 = models.IntegerField(db_column='Topic50')
+    class Meta:
+        db_table = 'word2topic'
+    def __unicode__(self):
+        return u'%d %s' % (self.wordid,self.word) 
+    
+class Case2topic(models.Model):
+    caseid = models.IntegerField(primary_key=True,db_column='CaseId')
+    caseno = models.CharField(max_length=50L, db_column='CaseNo')
+    topic1 = models.IntegerField(db_column='Topic1')
+    topic2 = models.IntegerField(db_column='Topic2')
+    topic3 = models.IntegerField(db_column='Topic3')
+    topic4 = models.IntegerField(db_column='Topic4')
+    topic5 = models.IntegerField(db_column='Topic5')
+    topic6 = models.IntegerField(db_column='Topic6')
+    topic7 = models.IntegerField(db_column='Topic7')
+    topic8 = models.IntegerField(db_column='Topic8')
+    topic9 = models.IntegerField(db_column='Topic9')
+    topic10 = models.IntegerField(db_column='Topic10')
+    topic11 = models.IntegerField(db_column='Topic11')
+    topic12 = models.IntegerField(db_column='Topic12')
+    topic13 = models.IntegerField(db_column='Topic13')
+    topic14 = models.IntegerField(db_column='Topic14')
+    topic15 = models.IntegerField(db_column='Topic15')
+    topic16 = models.IntegerField(db_column='Topic16')
+    topic17 = models.IntegerField(db_column='Topic17')
+    topic18 = models.IntegerField(db_column='Topic18')
+    topic19 = models.IntegerField(db_column='Topic19')
+    topic20 = models.IntegerField(db_column='Topic20')
+    topic21 = models.IntegerField(db_column='Topic21')
+    topic22 = models.IntegerField(db_column='Topic22')
+    topic23 = models.IntegerField(db_column='Topic23')
+    topic24 = models.IntegerField(db_column='Topic24')
+    topic25 = models.IntegerField(db_column='Topic25')
+    topic26 = models.IntegerField(db_column='Topic26')
+    topic27 = models.IntegerField(db_column='Topic27')
+    topic28 = models.IntegerField(db_column='Topic28')
+    topic29 = models.IntegerField(db_column='Topic29')
+    topic30 = models.IntegerField(db_column='Topic30')
+    topic31 = models.IntegerField(db_column='Topic31')
+    topic32 = models.IntegerField(db_column='Topic32')
+    topic33 = models.IntegerField(db_column='Topic33')
+    topic34 = models.IntegerField(db_column='Topic34')
+    topic35 = models.IntegerField(db_column='Topic35')
+    topic36 = models.IntegerField(db_column='Topic36')
+    topic37 = models.IntegerField(db_column='Topic37')
+    topic38 = models.IntegerField(db_column='Topic38')
+    topic39 = models.IntegerField(db_column='Topic39')
+    topic40 = models.IntegerField(db_column='Topic40')
+    topic41 = models.IntegerField(db_column='Topic41')
+    topic42 = models.IntegerField(db_column='Topic42')
+    topic43 = models.IntegerField(db_column='Topic43')
+    topic44 = models.IntegerField(db_column='Topic44')
+    topic45 = models.IntegerField(db_column='Topic45')
+    topic46 = models.IntegerField(db_column='Topic46')
+    topic47 = models.IntegerField(db_column='Topic47')
+    topic48 = models.IntegerField(db_column='Topic48')
+    topic49 = models.IntegerField(db_column='Topic49')
+    topic50 = models.IntegerField(db_column='Topic50')
+    class Meta:
+        db_table = 'case2topic'
+    def __unicode__(self):
+        return u'%d %s' % (self.caseid,self.caseno) 
