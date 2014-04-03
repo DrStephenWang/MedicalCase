@@ -1,32 +1,26 @@
 # Create your views here.
 #encoding=utf-8
-from django.shortcuts import render_to_response
-from django.db.models import Q
-from django.views.static import serve
+from NLPIR.nlpir import Seg, seg, segment
+from TCM.models import Accesstime, Aggregation, Case2topic, Doctor, Medicalcase, \
+    ResultMedAndPre, ResultSymptomAndDisease, ResultWithoutMedicine, Word2case1, \
+    Word2case2, Word2case3, Word2case4, Word2case5, Word2topic
+from datetime import datetime, timedelta
 from django.conf import settings
-from TCM.models import Doctor
-from TCM.models import Medicalcase
-from TCM.models import Aggregation
-from TCM.models import Accesstime
-from TCM.models import ResultMedAndPre
-from TCM.models import ResultWithoutMedicine
-from TCM.models import ResultSymptomAndDisease
-from TCM.models import Word2topic
-from TCM.models import Case2topic
-from django.http import HttpResponse
-from django.http import HttpResponseRedirect
-from django.template import RequestContext 
+from django.core import serializers
+from django.db.models import Q
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+from django.views.static import serve
 import MySQLdb
+import chardet
 import json
 import string
-from django.core import serializers
-from datetime import datetime,timedelta
 import time
 
 VISITTIMES = -1
  
 def front(request):
-            
     return render_to_response('front.html')
 
 def classifyBrows(request):
@@ -63,11 +57,12 @@ def seniorSearch(request):
 def caseTopicSearch(keyword):
     list = []
     result = Word2topic.objects.filter(word__exact=keyword)
-    retval=serializers.serialize("json",result)
-    retval=json.loads(retval)
     
     if len(result)==0:
         return list
+    
+    retval=serializers.serialize("json",result)
+    retval=json.loads(retval)
     
     result = Case2topic.objects.all()
     allCase = serializers.serialize("json",result)
@@ -88,6 +83,71 @@ def caseTopicSearch(keyword):
                 list[j+1] = list[j];
                 list[j] = tmp;
     return list
+
+def wordCaseSearch(paragraph):
+    wordSegment = seg(paragraph)
+    wordList = []
+    wordCount = []
+    wordIdList = []
+    
+    for eachSegment in wordSegment:
+        flag = False
+        for i in range(len(wordList)):
+            if wordList[i]==eachSegment[0]:
+                wordCount[i] += 1
+                flag = True
+                break
+        if flag==False:
+            wordList.append(eachSegment[0])
+            wordCount.append(1)
+                    
+    caseProbabilityList = [{'caseProbability':1,'caseid':i+1} for i in range(4216)]
+    result = Word2case1.objects.filter(word__in=wordList)
+    if len(result)!=0:
+        retval=serializers.serialize("json",result)
+        retval=json.loads(retval)
+        for eachLine in retval:
+            wordIdList.append(eachLine["pk"])
+            for i in range(1,1001):
+                caseProbabilityList[i-1]['caseProbability'] *= eachLine["fields"]["case"+str(i)]**wordCount[wordList.index(eachLine["fields"]["word"])]
+        
+        result = Word2case2.objects.filter(wordid__in=wordIdList)
+        retval=serializers.serialize("json",result)
+        retval=json.loads(retval)
+        for eachLine in retval:
+            for i in range(1001,2001):
+                caseProbabilityList[i-1]['caseProbability'] *= eachLine["fields"]["case"+str(i)]**wordCount[wordList.index(eachLine["fields"]["word"])]
+        
+        result = Word2case3.objects.filter(wordid__in=wordIdList)
+        retval=serializers.serialize("json",result)
+        retval=json.loads(retval)
+        for eachLine in retval:
+            for i in range(2001,3001):
+                caseProbabilityList[i-1]['caseProbability'] *= eachLine["fields"]["case"+str(i)]**wordCount[wordList.index(eachLine["fields"]["word"])]
+        
+        result = Word2case4.objects.filter(wordid__in=wordIdList)
+        retval=serializers.serialize("json",result)
+        retval=json.loads(retval)
+        for eachLine in retval:
+            for i in range(3001,4001):
+                caseProbabilityList[i-1]['caseProbability'] *= eachLine["fields"]["case"+str(i)]**wordCount[wordList.index(eachLine["fields"]["word"])]
+        
+        result = Word2case5.objects.filter(wordid__in=wordIdList)
+        retval=serializers.serialize("json",result)
+        retval=json.loads(retval)
+        for eachLine in retval:
+            for i in range(4001,4217):
+                caseProbabilityList[i-1]['caseProbability'] *= eachLine["fields"]["case"+str(i)]**wordCount[wordList.index(eachLine["fields"]["word"])]
+    
+    for i in range(len(caseProbabilityList)-1):
+        for j in range(len(caseProbabilityList)-1-i):
+            if caseProbabilityList[j]["caseProbability"]<caseProbabilityList[j+1]["caseProbability"]:
+                tmp = caseProbabilityList[j+1];
+                caseProbabilityList[j+1] = caseProbabilityList[j];
+                caseProbabilityList[j] = tmp;    
+
+    print(caseProbabilityList)   
+    return caseProbabilityList
 
 def caseDetail(request):
     casename = request.GET.get('casename',None)
@@ -179,7 +239,6 @@ def therList(request):
     response.write(data)
     return response
     
-    
 def doctorResultList(request):
         response=HttpResponse()
         drname=request.POST.get('drname',None)
@@ -224,7 +283,9 @@ def frontResultList(request):
     response=HttpResponse()
 #     response['Content-Type']="text/javascript" 
     keyword = request.POST.get('keyword',None)
-    caselist = caseTopicSearch(keyword)
+    caselist = []
+    #caselist = caseTopicSearch(keyword)
+    caselist = wordCaseSearch(keyword)
     type=request.POST.get('type',None)
     pageNo=request.POST.get('pageno',None)
     pageSize=request.POST.get('pagesize',None)
@@ -260,6 +321,7 @@ def frontResultList(request):
             for j in range(pageSize):
                 if (pageNo-1)*pageSize+j>=i:
                     break;
+                print(caselist[j]["caseid"])
                 result=Medicalcase.objects.get(caseid__exact=caselist[j]["caseid"])
                 list.append({"field1":result.drname,"field2":result.casename})
             data['count']=i

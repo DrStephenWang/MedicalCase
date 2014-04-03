@@ -123,7 +123,6 @@ function getFrontListSuccessCB(data,textStatus,jqXHR) {
 	$("#front_search_list_title").html(getTableTitle(typeEn));
 	$("#front_search_list_info").html(table);
 	
-	
 	if (parseInt(data.count) <= pageSize)
 	{
 		$("#front_search_pagincation").hide();
